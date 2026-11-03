@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Ares Vault - Professional seed-based password generator. Generates high-entropy passwords from personal anchors in a clean dashboard interface with Light and Pure Black Dark modes. 100% client-side.">
-  <meta name="theme-color" content="#ffffff">
-  <title>Ares Vault - Professional Password Dashboard</title>
+  <meta name="description" content="Ares Vault - High-entropy deterministic password generator inspired by frosted glass spatial UI. Zero telemetry, 100% client-side privacy.">
+  <meta name="theme-color" content="#0d141d">
+  <title>Ares Vault - Frosted Glass Credential Synthesizer</title>
 
-  <!-- Inter & JetBrains Mono Fonts -->
+  <!-- Google Fonts: Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -16,486 +16,519 @@
 </head>
 <body>
 
-  <!-- Top Navigation Bar -->
-  <nav class="top-navbar" aria-label="Global navigation">
-    <div class="container nav-inner">
-      <a href="#" class="brand-section" aria-label="Ares Vault Home">
-        <div class="brand-logo-badge">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-            <path d="m9 12 2 2 4-4"></path>
-          </svg>
-        </div>
-        <div class="brand-title-wrap">
-          <span class="brand-title">Ares Vault</span>
-          <span class="brand-tag">v2.2</span>
-        </div>
-      </a>
-
-      <div class="nav-actions">
-        <!-- Theme Toggle Button -->
-        <button type="button" class="theme-toggle-btn" id="btn-theme-toggle" aria-label="Toggle light and dark theme">
-          <svg class="theme-icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          </svg>
-          <svg class="theme-icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-          <span class="theme-label-text">Theme</span>
-        </button>
-
-        <div class="status-badge">
-          <span class="status-dot"></span>
-          <span>Client-Side Sandbox</span>
-        </div>
-        <a href="#usage-guide" class="nav-guide-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M12 16v-4"></path>
-            <path d="M12 8h.01"></path>
-          </svg>
-          <span>Usage Guide</span>
-        </a>
-      </div>
+  <!-- Dynamic Atmospheric Backdrop: Light Mode Sky vs Dark Mode Image 2 Color Mesh -->
+  <div class="ambient-backdrop" aria-hidden="true">
+    <!-- Dark Mode: Ambient Mesh Aura with Image 2 Palette (Pitch Dark + Glowing Acid Lime / Emerald) -->
+    <div class="dark-mesh-backdrop">
+      <div class="mesh-orb mesh-lime"></div>
+      <div class="mesh-orb mesh-cyan"></div>
+      <div class="mesh-orb mesh-deep"></div>
+      <div class="dark-grid-overlay"></div>
     </div>
-  </nav>
 
-  <!-- Page Header -->
-  <header class="page-header">
-    <div class="container page-header-inner">
-      <div class="page-header-text">
-        <h1>Dashboard</h1>
-        <p>
-          Synthesize high-entropy credentials from memorable personal anchors. Compute passwords locally with zero network calls and full client-side privacy.
-        </p>
-      </div>
-      <div class="page-header-actions">
-        <button type="button" class="btn btn-secondary" id="btn-quick-demo">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-          </svg>
-          <span>Demo Data</span>
-        </button>
-        <button type="button" class="btn btn-secondary" id="btn-reset" aria-label="Clear inputs">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
-            <path d="M21 3v5h-5"></path>
-            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
-            <path d="M8 16H3v5"></path>
-          </svg>
-          <span>Reset</span>
-        </button>
-      </div>
-    </div>
-  </header>
+    <!-- Light Mode: Vivid Blue Sky with Striped Sun & Flowing Cream Waves (Image 1 Inspiration) -->
+    <div class="light-sky-backdrop">
+      <div class="sky-gradient-base"></div>
+      <div class="sky-sun-beam"></div>
 
-  <!-- Main Workspace -->
-  <main class="main-workspace">
-    <div class="container">
+      <!-- Stylized Striped Sun (Top-Right, matching Image 1) -->
+      <svg class="sky-sun-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="sunStripes" width="16" height="16" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="0" y2="16" stroke="#fcd34d" stroke-width="7" />
+            <line x1="8" y1="0" x2="8" y2="16" stroke="#f59e0b" stroke-width="7" />
+          </pattern>
+          <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#fde047" stop-opacity="0.95" />
+            <stop offset="70%" stop-color="#f59e0b" stop-opacity="0.98" />
+            <stop offset="100%" stop-color="#d97706" stop-opacity="1" />
+          </radialGradient>
+        </defs>
+        <circle cx="80" cy="80" r="66" fill="url(#sunGlow)" />
+        <circle cx="80" cy="80" r="66" fill="url(#sunStripes)" opacity="0.88" />
+      </svg>
 
-      <!-- Top Overview Metrics Strip (Matching Dashboard Images) -->
-      <div class="metrics-overview-grid">
-        <div class="metric-overview-card">
-          <span class="metric-overview-label">Entropy Rating</span>
-          <div class="metric-overview-value" id="overview-entropy-rating">Fortress</div>
-          <span class="metric-overview-desc" id="overview-entropy-desc">96 bits Shannon entropy</span>
-        </div>
-        <div class="metric-overview-card">
-          <span class="metric-overview-label">Crack Resistance</span>
-          <div class="metric-overview-value" id="overview-crack-time">Centuries</div>
-          <span class="metric-overview-desc">Excludes dictionary attacks via seed salt</span>
-        </div>
-        <div class="metric-overview-card">
-          <span class="metric-overview-label">Active Archetypes</span>
-          <div class="metric-overview-value">8 Formats</div>
-          <span class="metric-overview-desc">Synthesized from 4 personal anchors</span>
-        </div>
-      </div>
-      
-      <div class="dashboard-layout">
-        
-        <!-- Left Column: Input Configuration Card -->
-        <div class="card">
-          <div class="card-title-bar">
-            <div class="card-title-group">
-              <div class="card-title-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                </svg>
-              </div>
-              <h2>Seed Parameters</h2>
-            </div>
-            <span class="card-subhint">4 Cognitive Anchors</span>
-          </div>
-
-          <form id="vault-form" autocomplete="off">
-            
-            <!-- Anchor 1: Name -->
-            <div class="form-field">
-              <label for="seed-name" class="field-label">
-                <span>Name / Handle</span>
-                <span class="field-label-desc">User identifier or nickname</span>
-              </label>
-              <div class="input-container">
-                <div class="field-icon">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                  </svg>
-                </div>
-                <input type="text" id="seed-name" class="text-input" placeholder="e.g. Ares, Pranov, Jordan" spellcheck="false" required>
-              </div>
-            </div>
-
-            <!-- Anchor 2: Date of Birth -->
-            <div class="form-field">
-              <label for="seed-dob" class="field-label">
-                <span>Date of Birth (DOB)</span>
-                <span class="field-label-desc">Parses day, month, and year</span>
-              </label>
-              <div class="input-container">
-                <div class="field-icon">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                  </svg>
-                </div>
-                <input type="date" id="seed-dob" class="text-input" required>
-              </div>
-            </div>
-
-            <!-- Anchor 3: Favorite Color -->
-            <div class="form-field">
-              <label for="seed-color" class="field-label">
-                <span>Favorite Color</span>
-                <span class="field-label-desc">Click swatch or type custom</span>
-              </label>
-              <div class="input-container">
-                <div class="field-icon">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="m4.93 4.93 4.24 4.24"></path>
-                    <path d="m14.83 9.17 4.24-4.24"></path>
-                    <path d="m14.83 14.83 4.24 4.24"></path>
-                    <path d="m9.17 14.83-4.24 4.24"></path>
-                  </svg>
-                </div>
-                <input type="text" id="seed-color" class="text-input" placeholder="e.g. Crimson, Emerald, Sapphire" spellcheck="false" required>
-              </div>
-              <div class="color-picker-grid">
-                <button type="button" class="color-swatch-btn" data-color="Crimson" title="Crimson">
-                  <span class="swatch-pip" style="background-color: #ef4444;"></span>
-                  <span class="swatch-name">Crimson</span>
-                </button>
-                <button type="button" class="color-swatch-btn" data-color="Emerald" title="Emerald">
-                  <span class="swatch-pip" style="background-color: #10b981;"></span>
-                  <span class="swatch-name">Emerald</span>
-                </button>
-                <button type="button" class="color-swatch-btn" data-color="Sapphire" title="Sapphire">
-                  <span class="swatch-pip" style="background-color: #3b82f6;"></span>
-                  <span class="swatch-name">Sapphire</span>
-                </button>
-                <button type="button" class="color-swatch-btn" data-color="Obsidian" title="Obsidian">
-                  <span class="swatch-pip" style="background-color: #475569;"></span>
-                  <span class="swatch-name">Obsidian</span>
-                </button>
-                <button type="button" class="color-swatch-btn" data-color="Violet" title="Violet">
-                  <span class="swatch-pip" style="background-color: #8b5cf6;"></span>
-                  <span class="swatch-name">Violet</span>
-                </button>
-                <button type="button" class="color-swatch-btn" data-color="Amber" title="Amber">
-                  <span class="swatch-pip" style="background-color: #f59e0b;"></span>
-                  <span class="swatch-name">Amber</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Anchor 4: Custom Word / Thing -->
-            <div class="form-field">
-              <label for="seed-custom" class="field-label">
-                <span>Custom Anchor Word</span>
-                <span class="field-label-desc">Pet, lucky word, symbol, or city</span>
-              </label>
-              <div class="input-container">
-                <div class="field-icon">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 2v20"></path>
-                    <path d="m4.93 4.93 14.14 14.14"></path>
-                    <path d="M2 12h20"></path>
-                    <path d="m19.07 4.93-14.14 14.14"></path>
-                  </svg>
-                </div>
-                <input type="text" id="seed-custom" class="text-input" placeholder="e.g. Titan, Shadow, Falcon" spellcheck="false" required>
-              </div>
-            </div>
-
-            <!-- Advanced Configuration Drawer -->
-            <details class="config-drawer" open>
-              <summary class="drawer-summary">
-                <div class="summary-heading">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="3"></circle>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                  </svg>
-                  <span>Complexity Tuning</span>
-                </div>
-                <span class="card-subhint">Options</span>
-              </summary>
-              <div class="drawer-body">
-                <label class="switch-control">
-                  <span>Leet Sub (a->@, e->3)</span>
-                  <div class="switch-shell">
-                    <input type="checkbox" id="opt-leet" checked>
-                    <span class="switch-track"></span>
-                  </div>
-                </label>
-
-                <label class="switch-control">
-                  <span>Special Symbols (!#$*)</span>
-                  <div class="switch-shell">
-                    <input type="checkbox" id="opt-symbols" checked>
-                    <span class="switch-track"></span>
-                  </div>
-                </label>
-
-                <label class="switch-control">
-                  <span>Crypto Entropy Salt</span>
-                  <div class="switch-shell">
-                    <input type="checkbox" id="opt-salt" checked>
-                    <span class="switch-track"></span>
-                  </div>
-                </label>
-
-                <label class="switch-control">
-                  <span>Force UPPERCASE</span>
-                  <div class="switch-shell">
-                    <input type="checkbox" id="opt-upper">
-                    <span class="switch-track"></span>
-                  </div>
-                </label>
-
-                <div class="form-field" style="margin-bottom: 0; grid-column: 1 / -1;">
-                  <label for="opt-separator" class="field-label" style="font-size: 0.74rem;">
-                    <span>Passphrase Separator</span>
-                  </label>
-                  <select id="opt-separator" class="text-input" style="height: 38px; padding-left: 0.75rem;">
-                    <option value="-">Hyphen (-)</option>
-                    <option value="_">Underscore (_)</option>
-                    <option value="#">Hash (#)</option>
-                    <option value=".">Dot (.)</option>
-                    <option value="">None (Concatenated)</option>
-                  </select>
-                </div>
-              </div>
-            </details>
-
-            <!-- Submit Action Button -->
-            <button type="submit" class="btn btn-primary btn-full" id="btn-generate">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-              </svg>
-              <span>Generate Passwords</span>
-            </button>
-
-            <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 0.75rem;">
-              Shortcut: <kbd style="background: var(--bg-subtle); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">Ctrl + Enter</kbd> to re-generate anytime
-            </div>
-
-          </form>
-        </div>
-
-        <!-- Right Column: Results & Variations Display -->
-        <div class="results-column">
-          
-          <!-- Featured Result Card -->
-          <div class="featured-output-card">
-            <div class="output-meta-row">
-              <span class="pill-indicator">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                  <path d="m9 12 2 2 4-4"></path>
-                </svg>
-                Primary Fortress Credential
-              </span>
-              <span id="strength-label" style="font-size: 0.76rem; color: var(--text-muted); font-weight: 500;">Real-Time Entropy</span>
-            </div>
-
-            <!-- Password Display String -->
-            <div class="primary-password-display">
-              <div id="primary-password-text" class="password-text-string empty">Fill seeds to generate</div>
-              <div class="output-button-group">
-                <button type="button" class="btn-icon" id="btn-toggle-visibility" aria-label="Toggle password masking">
-                  <svg id="icon-eye-open" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                  <svg id="icon-eye-closed" style="display: none;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
-                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
-                    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
-                    <line x1="2" y1="2" x2="22" y2="22"></line>
-                  </svg>
-                </button>
-                <button type="button" class="btn btn-primary" id="btn-copy-primary" aria-label="Copy primary password">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                  </svg>
-                  <span>Copy</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Stripe-Style Metrics Summary Strip -->
-            <div class="metric-summary-strip">
-              <div class="metric-unit">
-                <span class="metric-caption">Security Rating</span>
-                <span id="strength-value" class="metric-data success">Fortress</span>
-              </div>
-              <div class="metric-unit">
-                <span class="metric-caption">Brute Force Crack Time</span>
-                <span id="strength-crack-time" class="metric-data tabular-numbers">Centuries</span>
-              </div>
-              <div class="metric-unit">
-                <span class="metric-caption">Shannon Entropy</span>
-                <span id="strength-entropy" class="metric-data tabular-numbers">96 bits</span>
-              </div>
-            </div>
-
-            <!-- Segmented Strength Bar -->
-            <div class="strength-progress-track" aria-hidden="true">
-              <div id="seg-1" class="strength-bar-cell score-strong"></div>
-              <div id="seg-2" class="strength-bar-cell score-strong"></div>
-              <div id="seg-3" class="strength-bar-cell score-strong"></div>
-              <div id="seg-4" class="strength-bar-cell score-strong"></div>
-            </div>
-          </div>
-
-          <!-- Variations Panel -->
-          <div class="variations-panel">
-            <div class="variations-top-bar">
-              <div class="variations-heading">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="8" y1="6" x2="21" y2="6"></line>
-                  <line x1="8" y1="12" x2="21" y2="12"></line>
-                  <line x1="8" y1="18" x2="21" y2="18"></line>
-                  <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                  <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                  <line x1="3" y1="18" x2="3.01" y2="18"></line>
-                </svg>
-                <span>Synthesized Password Archetypes</span>
-              </div>
-              <button type="button" class="btn btn-secondary" id="btn-copy-all" style="padding: 0.35rem 0.65rem; font-size: 0.78rem;">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-                <span>Copy All</span>
-              </button>
-            </div>
-
-            <div id="variations-list" class="variations-table">
-              <!-- Rendered dynamically by app.js -->
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- Usage & Architecture Section (Linear Style) -->
-      <section id="usage-guide" class="doc-section">
-        <div class="doc-header">
-          <h2>Ares Vault Usage & Architecture</h2>
-          <p>
-            Ares Vault uses personal cognitive seeds to synthesize deterministic, high-entropy passwords that are easy for you to recall but computationally infeasible to brute force.
-          </p>
-        </div>
-
-        <div class="steps-grid">
-          <div class="step-card">
-            <div class="step-num">Step 01</div>
-            <h3>Define Cognitive Anchors</h3>
-            <p>
-              Supply parameters you inherently remember: your name or handle, birth date (from which year, month, and day are derived), a favorite color, and a memorable anchor word or token.
-            </p>
-          </div>
-
-          <div class="step-card">
-            <div class="step-num">Step 02</div>
-            <h3>Deterministic Synthesis</h3>
-            <p>
-              The engine applies character substitution matrices (leetspeak), boundary framing, case rhythm, and optional cryptographic salt to expand candidate search spaces past 80-95 bits.
-            </p>
-          </div>
-
-          <div class="step-card">
-            <div class="step-num">Step 03</div>
-            <h3>Select Credential Archetype</h3>
-            <p>
-              Pick the format suited for your target platform: Fortress Tactical for primary master accounts, Memorable Passphrase for mobile typing, or Alphanumeric PIN for strict banking portals.
-            </p>
-          </div>
-        </div>
-
-        <!-- Privacy & Security Guarantee Banner -->
-        <div class="privacy-banner">
-          <div class="privacy-banner-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-          </div>
-          <div class="privacy-banner-content">
-            <h4>100% Client-Side Memory Sandbox</h4>
-            <p>
-              All inputs, computations, and entropy calculations execute strictly in your local browser runtime via the W3C Web Cryptography API. No network requests are made, no telemetry is transmitted, and no state is cached to local storage. You can disconnect your device from the internet and Ares Vault will continue functioning without interruption.
-            </p>
-          </div>
-        </div>
-
-      </section>
-
-    </div>
-  </main>
-
-  <!-- Sonner-Style Floating Toast Viewport -->
-  <div class="toast-viewport" aria-live="polite">
-    <div id="toast" class="sonner-toast">
-      <div class="toast-check-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="20 6 9 17 4 12"></polyline>
-        </svg>
-      </div>
-      <span id="toast-message">Password copied to clipboard</span>
+      <!-- Stylized Flowing Cream Cloud Waves (Bottom & Sides, matching Image 1) -->
+      <svg class="sky-clouds-svg" viewBox="0 0 1440 440" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M-40 440 L-40 260 C80 240 180 300 300 270 C420 240 480 160 620 160 C740 160 820 220 940 220 C1080 220 1140 100 1260 90 C1360 80 1420 130 1480 160 L1480 440 Z" fill="#fdfbf7" opacity="0.94"/>
+        <path d="M-40 440 L-40 320 C140 310 240 360 400 340 C560 320 640 250 780 260 C920 270 1040 340 1180 320 C1300 300 1380 330 1480 340 L1480 440 Z" fill="#f4efe6" opacity="0.98"/>
+        <!-- Soft floating cloud puffs -->
+        <ellipse cx="180" cy="220" rx="90" ry="32" fill="#ffffff" opacity="0.85" />
+        <ellipse cx="1120" cy="80" rx="110" ry="38" fill="#ffffff" opacity="0.9" />
+      </svg>
     </div>
   </div>
 
-  <!-- App Footer -->
-  <footer class="app-footer">
-    <div class="container footer-content">
-      <div class="footer-left">
-        <strong>Ares Vault</strong>
-        <span>•</span>
-        <span>Version 2.2.0</span>
-        <span>•</span>
-        <span>Open Source Security Instrument</span>
+  <!-- Master Viewport -->
+  <div class="workspace-viewport">
+
+    <!-- Floating Left Pill Dock (Matching Reference Sidebar) -->
+    <aside class="floating-pill-dock" aria-label="Sidebar Navigation Dock">
+      <button type="button" class="dock-btn active" id="dock-btn-vault" title="Primary Credential Vault">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          <path d="m9 12 2 2 4-4"></path>
+        </svg>
+      </button>
+
+      <button type="button" class="dock-btn" id="dock-btn-anchors" title="Seed Anchors">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="21" x2="4" y2="14"></line>
+          <line x1="4" y1="10" x2="4" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12" y2="3"></line>
+          <line x1="20" y1="21" x2="20" y2="16"></line>
+          <line x1="20" y1="12" x2="20" y2="3"></line>
+          <line x1="1" y1="14" x2="7" y2="14"></line>
+          <line x1="9" y1="8" x2="15" y2="8"></line>
+          <line x1="17" y1="16" x2="23" y2="16"></line>
+        </svg>
+      </button>
+
+      <button type="button" class="dock-btn" id="dock-btn-archetypes" title="Synthesized Archetypes">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+      </button>
+
+      <button type="button" class="dock-btn" id="dock-btn-theme" title="Toggle Theme (Studio Dark / Daylight)">
+        <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="icon-moon" style="display: none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+
+      <button type="button" class="dock-btn" id="dock-btn-guide" title="Usage & Architecture Guide">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 16v-4"></path>
+          <path d="M12 8h.01"></path>
+        </svg>
+      </button>
+    </aside>
+
+    <!-- Main Frosted Glass Console Window -->
+    <main class="glass-console-wrapper">
+      <div class="glass-console" id="glass-console-root">
+
+        <!-- Top Header Navigation Bar (Matching Lifestats header) -->
+        <header class="console-header">
+          <div class="console-brand-wrap">
+            <h1 class="console-title">Ares Vault</h1>
+            <span class="sandbox-pill">
+              <span class="pulse-dot"></span>
+              Client-Side Sandbox
+            </span>
+          </div>
+
+          <div class="header-right-actions">
+            <button type="button" class="header-icon-btn" id="btn-demo-trigger" title="Load High-Entropy Preset">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              <span>Demo Seed</span>
+            </button>
+
+            <button type="button" class="header-icon-btn" id="btn-reset-trigger" title="Reset All Fields">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                <path d="M21 3v5h-5"></path>
+                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+                <path d="M8 16H3v5"></path>
+              </svg>
+            </button>
+
+            <button type="button" class="header-icon-btn header-bell-btn" id="btn-security-info" title="Privacy Sandbox Verified">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+            </button>
+
+            <div class="user-avatar-badge" title="Cryptographic Workspace">
+              <span class="avatar-initials">AV</span>
+            </div>
+          </div>
+        </header>
+
+        <!-- Console Grid: 2 Balanced Asymmetric Columns (Matching Reference Proportions) -->
+        <div class="console-body-grid">
+
+          <!-- Left Column: Primary Credential + Synthesized Archetypes List -->
+          <section class="console-column column-left">
+
+            <!-- Primary Credential Card (Hero Studio) -->
+            <article class="glass-subcard primary-credential-card" id="section-hero">
+              <div class="card-header-row">
+                <div class="card-label-badge">
+                  <span class="badge-tag">PRIMARY VAULT CREDENTIAL</span>
+                  <span class="badge-sub" id="active-credential-badge">Fortress Tactical</span>
+                </div>
+                <div class="credential-actions">
+                  <button type="button" class="card-action-btn" id="btn-toggle-visibility" title="Mask / Unmask">
+                    <svg id="icon-eye-open" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <svg id="icon-eye-closed" style="display: none;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                      <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                  </button>
+                  <button type="button" class="copy-primary-btn" id="btn-copy-primary">
+                    <svg class="copy-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span id="copy-primary-label">Copy</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Main Password Monospace Display -->
+              <div class="password-monolith-box">
+                <span id="primary-password-text" class="password-text-string">Cr1m$0n#4r3$!00$717@n*koa</span>
+              </div>
+
+              <!-- Segmented Strength Track -->
+              <div class="strength-track-wrap">
+                <div class="strength-segments" aria-label="Entropy Strength">
+                  <span class="strength-seg active" id="seg-1"></span>
+                  <span class="strength-seg active" id="seg-2"></span>
+                  <span class="strength-seg active" id="seg-3"></span>
+                  <span class="strength-seg active" id="seg-4"></span>
+                </div>
+              </div>
+
+              <!-- Compact Sub-Metrics Row -->
+              <div class="credential-meta-row">
+                <div class="meta-item">
+                  <span class="meta-label">SECURITY RATING</span>
+                  <span class="meta-value status-text-emerald" id="strength-value">Fortress</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">BRUTE-FORCE CRACK TIME</span>
+                  <span class="meta-value" id="strength-crack-time">Centuries</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">SHANNON ENTROPY</span>
+                  <span class="meta-value" id="strength-entropy">164 bits</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Synthesized Password Archetypes (Matching the "Challenges" section from Reference) -->
+            <article class="glass-subcard archetypes-section" id="section-archetypes">
+              <div class="section-title-row">
+                <div class="title-left">
+                  <h2 class="subcard-title">Synthesized Archetypes</h2>
+                  <span class="subcard-subtitle">8 Deterministic Formats for Every Platform</span>
+                </div>
+                <button type="button" class="btn-text-action" id="btn-copy-all" title="Copy all 8 archetypes">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span>Copy All</span>
+                </button>
+              </div>
+
+              <!-- Archetypes List Table (Challenges Row Pattern) -->
+              <div class="archetypes-list" id="variations-list">
+                <!-- Dynamically populated by app.js -->
+              </div>
+            </article>
+
+          </section>
+
+          <!-- Right Column: Metrics Overview + Era Scrubber + Seed Anchors + Complexity -->
+          <section class="console-column column-right">
+
+            <!-- Top Row: Stacked Metrics & Circular Entropy Gauge (Inspired by Reference Overview) -->
+            <div class="overview-combo-grid">
+
+              <!-- Stacked 3 Metric Pills (like 108bpm, 2.5km, 1.7l in Reference) -->
+              <div class="stacked-metrics-col">
+                <div class="mini-metric-card">
+                  <div class="metric-icon-bubble">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                  </div>
+                  <div class="metric-info">
+                    <span class="metric-val" id="overview-entropy-rating">Fortress</span>
+                    <span class="metric-lbl" id="overview-entropy-desc">164 bits Shannon</span>
+                  </div>
+                </div>
+
+                <div class="mini-metric-card">
+                  <div class="metric-icon-bubble">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                  </div>
+                  <div class="metric-info">
+                    <span class="metric-val" id="overview-crack-time">Centuries</span>
+                    <span class="metric-lbl">Crack Resistance</span>
+                  </div>
+                </div>
+
+                <div class="mini-metric-card">
+                  <div class="metric-icon-bubble">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    </svg>
+                  </div>
+                  <div class="metric-info">
+                    <span class="metric-val">8 Formats</span>
+                    <span class="metric-lbl">Deterministic Sync</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Circular Entropy Gauge (Inspired by the Donut chart in Reference Overview) -->
+              <div class="gauge-card">
+                <div class="gauge-header">
+                  <span class="gauge-title">Security Gauge</span>
+                  <span class="gauge-tag">Optimal</span>
+                </div>
+                <div class="gauge-body">
+                  <div class="donut-chart-wrap">
+                    <svg class="donut-svg" viewBox="0 0 100 100">
+                      <circle class="donut-track" cx="50" cy="50" r="38" />
+                      <circle class="donut-fill-gold" cx="50" cy="50" r="38" stroke-dasharray="238.76" stroke-dashoffset="60" />
+                      <circle class="donut-fill-cyan" cx="50" cy="50" r="38" stroke-dasharray="238.76" stroke-dashoffset="140" />
+                    </svg>
+                    <div class="donut-center-text">
+                      <span class="donut-percentage">98%</span>
+                      <span class="donut-sublabel">Entropy</span>
+                    </div>
+                  </div>
+                  <div class="gauge-stats-list">
+                    <div class="gauge-stat-row">
+                      <span class="stat-dot gold-dot"></span>
+                      <span class="stat-name">Char Variety</span>
+                      <span class="stat-val">4 / 4</span>
+                    </div>
+                    <div class="gauge-stat-row">
+                      <span class="stat-dot cyan-dot"></span>
+                      <span class="stat-name">Anchor Sets</span>
+                      <span class="stat-val">4 Active</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Birth Era Scrubber (EXACTLY inspired by the June 2023 calendar scrubber in Reference) -->
+            <article class="glass-subcard era-scrubber-card" id="section-era">
+              <div class="scrubber-header-row">
+                <div class="scrubber-title-wrap">
+                  <h3 class="scrubber-title" id="era-month-label">Temporal Epoch Anchor</h3>
+                  <span class="scrubber-subtitle">Select birth epoch or scrub birth year</span>
+                </div>
+                <div class="scrubber-nav-arrows">
+                  <button type="button" class="scrubber-arrow-btn" id="btn-era-prev" title="Previous Decade">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </button>
+                  <button type="button" class="scrubber-arrow-btn" id="btn-era-next" title="Next Decade">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Horizontal Capsule Scrubber (Matching Sun 18, Mon 19, Tue 20... in Reference) -->
+              <div class="capsule-scrubber-track" id="era-capsules-track">
+                <button type="button" class="era-capsule-btn" data-year="1990" data-dob="1990-05-15">
+                  <span class="capsule-sub">90s</span>
+                  <span class="capsule-main">1990</span>
+                </button>
+                <button type="button" class="era-capsule-btn" data-year="1995" data-dob="1995-05-15">
+                  <span class="capsule-sub">95s</span>
+                  <span class="capsule-main">1995</span>
+                </button>
+                <button type="button" class="era-capsule-btn active" data-year="2000" data-dob="2000-05-15">
+                  <span class="capsule-sub">00s</span>
+                  <span class="capsule-main">2000</span>
+                </button>
+                <button type="button" class="era-capsule-btn" data-year="2005" data-dob="2005-05-15">
+                  <span class="capsule-sub">05s</span>
+                  <span class="capsule-main">2005</span>
+                </button>
+                <button type="button" class="era-capsule-btn" data-year="2010" data-dob="2010-05-15">
+                  <span class="capsule-sub">10s</span>
+                  <span class="capsule-main">2010</span>
+                </button>
+                <button type="button" class="era-capsule-btn" data-year="2015" data-dob="2015-05-15">
+                  <span class="capsule-sub">15s</span>
+                  <span class="capsule-main">2015</span>
+                </button>
+                <button type="button" class="era-capsule-btn" data-year="2020" data-dob="2020-05-15">
+                  <span class="capsule-sub">20s</span>
+                  <span class="capsule-main">2020</span>
+                </button>
+              </div>
+
+              <!-- Exact DOB Input for Precision -->
+              <div class="exact-dob-row">
+                <label for="seed-dob" class="dob-inline-label">Exact Date:</label>
+                <input type="date" id="seed-dob" class="glass-input-sm" value="2000-05-15">
+              </div>
+            </article>
+
+            <!-- Seed Parameters & Complexity Tuning (Matching Output section in Reference) -->
+            <article class="glass-subcard tuning-card" id="section-anchors">
+              <h3 class="subcard-title">Cognitive Seed Anchors</h3>
+
+              <form id="vault-form" class="anchors-form" onsubmit="return false;">
+                
+                <!-- Name / Handle Anchor -->
+                <div class="form-field-group">
+                  <div class="field-header">
+                    <label for="seed-name" class="field-label">User Handle / Nickname</label>
+                    <div class="quick-preset-pills">
+                      <button type="button" class="preset-pill" data-name="Ares">Ares</button>
+                      <button type="button" class="preset-pill" data-name="Cipher">Cipher</button>
+                      <button type="button" class="preset-pill" data-name="Orion">Orion</button>
+                      <button type="button" class="preset-pill" data-name="Nexus">Nexus</button>
+                    </div>
+                  </div>
+                  <input type="text" id="seed-name" class="glass-input" placeholder="e.g. Ares" value="Ares" autocomplete="off" spellcheck="false">
+                </div>
+
+                <!-- Favorite Color Anchor with Matte Swatches -->
+                <div class="form-field-group">
+                  <div class="field-header">
+                    <label for="seed-color" class="field-label">Favorite Color Anchor</label>
+                    <div class="swatches-container">
+                      <button type="button" class="matte-swatch active" data-color="Crimson" style="--swatch-color: #dc2626;" title="Crimson"></button>
+                      <button type="button" class="matte-swatch" data-color="Emerald" style="--swatch-color: #059669;" title="Emerald"></button>
+                      <button type="button" class="matte-swatch" data-color="Sapphire" style="--swatch-color: #2563eb;" title="Sapphire"></button>
+                      <button type="button" class="matte-swatch" data-color="Obsidian" style="--swatch-color: #475569;" title="Obsidian"></button>
+                      <button type="button" class="matte-swatch" data-color="Violet" style="--swatch-color: #7c3aed;" title="Violet"></button>
+                      <button type="button" class="matte-swatch" data-color="Amber" style="--swatch-color: #d97706;" title="Amber"></button>
+                    </div>
+                  </div>
+                  <input type="text" id="seed-color" class="glass-input" placeholder="e.g. Crimson" value="Crimson" autocomplete="off" spellcheck="false">
+                </div>
+
+                <!-- Custom Anchor Word with Shuffle -->
+                <div class="form-field-group">
+                  <div class="field-header">
+                    <label for="seed-custom" class="field-label">Custom Anchor Word</label>
+                    <button type="button" class="btn-shuffle-anchor" id="btn-shuffle-word" title="Shuffle high-entropy anchor word">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 3 21 3 21 8"></polyline>
+                        <line x1="4" y1="20" x2="21" y2="3"></line>
+                        <polyline points="21 16 21 21 16 21"></polyline>
+                        <line x1="15" y1="15" x2="21" y2="21"></line>
+                        <line x1="4" y1="4" x2="9" y2="9"></line>
+                      </svg>
+                      <span>Shuffle</span>
+                    </button>
+                  </div>
+                  <input type="text" id="seed-custom" class="glass-input" placeholder="e.g. Titan" value="Titan" autocomplete="off" spellcheck="false">
+                </div>
+
+                <!-- Complexity Options Grid -->
+                <div class="complexity-toggles-grid">
+                  <label class="toggle-pill-label">
+                    <input type="checkbox" id="opt-leet" checked>
+                    <span class="toggle-pill-switch"></span>
+                    <span class="toggle-pill-text">Leet Sub (@, 3, $)</span>
+                  </label>
+
+                  <label class="toggle-pill-label">
+                    <input type="checkbox" id="opt-symbols" checked>
+                    <span class="toggle-pill-switch"></span>
+                    <span class="toggle-pill-text">Special Symbols</span>
+                  </label>
+
+                  <label class="toggle-pill-label">
+                    <input type="checkbox" id="opt-salt" checked>
+                    <span class="toggle-pill-switch"></span>
+                    <span class="toggle-pill-text">Cryptographic Salt</span>
+                  </label>
+
+                  <label class="toggle-pill-label">
+                    <input type="checkbox" id="opt-upper">
+                    <span class="toggle-pill-switch"></span>
+                    <span class="toggle-pill-text">Force UPPERCASE</span>
+                  </label>
+                </div>
+
+                <!-- Passphrase Separator -->
+                <div class="separator-field-row">
+                  <label for="opt-separator" class="field-label">Passphrase Delimiter:</label>
+                  <select id="opt-separator" class="glass-select">
+                    <option value="-" selected>Hyphen (-)</option>
+                    <option value="_">Underscore (_)</option>
+                    <option value=".">Period (.)</option>
+                    <option value="#">Pound (#)</option>
+                    <option value="$">Dollar ($)</option>
+                    <option value="">None (Concatenated)</option>
+                  </select>
+                </div>
+
+              </form>
+            </article>
+
+          </section>
+
+        </div>
+
+        <!-- Guide & Architecture Drawer / Section -->
+        <footer class="console-guide-footer" id="usage-guide">
+          <div class="guide-cards-grid">
+            <div class="guide-card">
+              <span class="guide-step-num">01</span>
+              <h4 class="guide-step-title">Cognitive Anchors</h4>
+              <p class="guide-step-text">Choose personal anchors you will never forget. Never store them in plaintext files.</p>
+            </div>
+            <div class="guide-card">
+              <span class="guide-step-num">02</span>
+              <h4 class="guide-step-title">Deterministic Engine</h4>
+              <p class="guide-step-text">The same anchors and rules always compute the exact same passwords across any device.</p>
+            </div>
+            <div class="guide-card">
+              <span class="guide-step-num">03</span>
+              <h4 class="guide-step-title">Zero Telemetry</h4>
+              <p class="guide-step-text">100% computed inside your browser sandbox. No backend servers, cookies, or tracking.</p>
+            </div>
+          </div>
+        </footer>
+
       </div>
-      <div>
-        <span>Engineered with Linear x Stripe Clean UI Standards</span>
-      </div>
-    </div>
-  </footer>
+    </main>
+
+  </div>
+
+  <!-- Subtle Notification Toast -->
+  <div id="toast" class="toast-capsule" role="status" aria-live="polite">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+    <span id="toast-message">Copied to clipboard</span>
+  </div>
 
   <script src="app.js"></script>
 </body>

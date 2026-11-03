@@ -1,39 +1,59 @@
 /**
- * Ares Vault - Seed-Based Password Generator Logic
- * Professional Linear x Stripe x Emil Kowalski Craft
- * Dual-Theme Engine: Pure Black Dark & Clean White Light
- * 100% Client-side execution. Zero telemetry.
+ * Ares Vault - Frosted Glassmorphic Credential Synthesizer Logic
+ * Inspired by Reference UI (Lifestats Glass Console)
+ * 100% Client-Side Privacy, Zero Network Calls, Deterministic Hashing
  */
 
 (function () {
   'use strict';
 
-  // Theme Management
+  // Constants & Storage Keys
   const THEME_STORAGE_KEY = 'ares_vault_theme';
-  const btnThemeToggle = document.getElementById('btn-theme-toggle');
 
-  // DOM Elements
-  const form = document.getElementById('vault-form');
+  // DOM Elements - Navigation & Theme
+  const dockBtnVault = document.getElementById('dock-btn-vault');
+  const dockBtnAnchors = document.getElementById('dock-btn-anchors');
+  const dockBtnArchetypes = document.getElementById('dock-btn-archetypes');
+  const dockBtnTheme = document.getElementById('dock-btn-theme');
+  const dockBtnGuide = document.getElementById('dock-btn-guide');
+  const iconSun = document.querySelector('.icon-sun');
+  const iconMoon = document.querySelector('.icon-moon');
+
+  // DOM Elements - Inputs
   const inputName = document.getElementById('seed-name');
   const inputDob = document.getElementById('seed-dob');
   const inputColor = document.getElementById('seed-color');
   const inputCustom = document.getElementById('seed-custom');
 
-  // Options
+  // DOM Elements - Options
   const optLeet = document.getElementById('opt-leet');
   const optSymbols = document.getElementById('opt-symbols');
   const optSalt = document.getElementById('opt-salt');
   const optUpper = document.getElementById('opt-upper');
   const optSeparator = document.getElementById('opt-separator');
 
-  // Top Overview Metrics Elements (Matching Dashboard Images)
-  const overviewRating = document.getElementById('overview-entropy-rating');
-  const overviewDesc = document.getElementById('overview-entropy-desc');
-  const overviewCrackTime = document.getElementById('overview-crack-time');
+  // DOM Elements - Scrubber & Swatches
+  const eraCapsules = document.querySelectorAll('.era-capsule-btn');
+  const btnEraPrev = document.getElementById('btn-era-prev');
+  const btnEraNext = document.getElementById('btn-era-next');
+  const matteSwatches = document.querySelectorAll('.matte-swatch');
+  const presetPills = document.querySelectorAll('.preset-pill');
+  const btnShuffleWord = document.getElementById('btn-shuffle-word');
 
-  // Outputs
+  // DOM Elements - Header & Actions
+  const btnDemoTrigger = document.getElementById('btn-demo-trigger');
+  const btnResetTrigger = document.getElementById('btn-reset-trigger');
+  const btnSecurityInfo = document.getElementById('btn-security-info');
+
+  // DOM Elements - Primary Display
   const primaryDisplay = document.getElementById('primary-password-text');
-  const primaryStrengthValue = document.getElementById('strength-value');
+  const activeCredentialBadge = document.getElementById('active-credential-badge');
+  const btnToggleVisibility = document.getElementById('btn-toggle-visibility');
+  const iconEyeOpen = document.getElementById('icon-eye-open');
+  const iconEyeClosed = document.getElementById('icon-eye-closed');
+  const btnCopyPrimary = document.getElementById('btn-copy-primary');
+  const copyPrimaryLabel = document.getElementById('copy-primary-label');
+  const strengthValue = document.getElementById('strength-value');
   const strengthCrackTime = document.getElementById('strength-crack-time');
   const strengthEntropy = document.getElementById('strength-entropy');
   const strengthSegments = [
@@ -43,22 +63,32 @@
     document.getElementById('seg-4')
   ];
 
+  // DOM Elements - Overview Metrics
+  const overviewEntropyRating = document.getElementById('overview-entropy-rating');
+  const overviewEntropyDesc = document.getElementById('overview-entropy-desc');
+  const overviewCrackTime = document.getElementById('overview-crack-time');
   const variationsList = document.getElementById('variations-list');
-  const btnToggleVisibility = document.getElementById('btn-toggle-visibility');
-  const iconEyeOpen = document.getElementById('icon-eye-open');
-  const iconEyeClosed = document.getElementById('icon-eye-closed');
-  const btnCopyPrimary = document.getElementById('btn-copy-primary');
   const btnCopyAll = document.getElementById('btn-copy-all');
-  const btnReset = document.getElementById('btn-reset');
-  const btnQuickDemo = document.getElementById('btn-quick-demo');
+
+  // Toast
   const toast = document.getElementById('toast');
   const toastMessage = document.getElementById('toast-message');
 
+  // State
   let isPasswordMasked = false;
   let currentPrimaryPassword = '';
-  let generatedVariations = [];
+  let activeArchetypeIndex = 0;
+  let generatedArchetypes = [];
+  let toastTimer = null;
 
-  // Leetspeak substitution matrix
+  // Curated High-Entropy Anchor Words
+  const ANCHOR_WORDS = [
+    'Titan', 'Obsidian', 'Vanguard', 'Krypton', 'Aegis',
+    'Valiant', 'Phantom', 'Sentinel', 'Apex', 'Zenith',
+    'Solstice', 'Tempest', 'Eclipse', 'Polaris', 'Orion'
+  ];
+
+  // Leet Map
   const LEET_MAP = {
     'a': '@', 'A': '4',
     'e': '3', 'E': '3',
@@ -70,472 +100,678 @@
     'g': '9', 'G': '9'
   };
 
+  // Initialize
   function init() {
     initTheme();
-    setupColorSwatches();
     setupEventListeners();
-    loadDemoSeeds();
+    setupEraScrubber();
+    setupMatteSwatches();
+    setupPresetPills();
+    generate();
   }
 
-  // Dual-Theme Controller
+  // Theme Management
   function initTheme() {
-    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-    if (savedTheme === 'dark' || savedTheme === 'light') {
-      applyTheme(savedTheme);
-    } else {
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      applyTheme(prefersDark ? 'dark' : 'light');
-    }
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || document.documentElement.getAttribute('data-theme') || 'dark';
+    applyTheme(savedTheme);
 
-    if (btnThemeToggle) {
-      btnThemeToggle.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    if (dockBtnTheme) {
+      dockBtnTheme.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
         const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
         applyTheme(nextTheme);
         localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
-        showToast(`Switched to ${nextTheme === 'dark' ? 'Pure Black' : 'Clean White'} mode`);
+        showToast(`Switched to ${nextTheme === 'dark' ? 'Studio Dark' : 'Daylight'} mode`);
       });
     }
   }
 
   function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
-    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-    if (metaThemeColor) {
-      metaThemeColor.setAttribute('content', theme === 'dark' ? '#0a0a0a' : '#ffffff');
+    if (iconSun && iconMoon) {
+      if (theme === 'dark') {
+        iconSun.style.display = 'block';
+        iconMoon.style.display = 'none';
+      } else {
+        iconSun.style.display = 'none';
+        iconMoon.style.display = 'block';
+      }
     }
   }
 
-  function setupColorSwatches() {
-    const swatches = document.querySelectorAll('.color-swatch-btn');
-    swatches.forEach(swatch => {
-      swatch.addEventListener('click', () => {
-        swatches.forEach(s => s.classList.remove('active'));
-        swatch.classList.add('active');
-        const colorVal = swatch.getAttribute('data-color');
-        if (colorVal) {
-          inputColor.value = colorVal;
-          if (hasAnyInput()) generateAllPasswords();
-        }
-      });
-    });
-
-    inputColor.addEventListener('input', () => {
-      const current = inputColor.value.trim().toLowerCase();
-      swatches.forEach(s => {
-        if (s.getAttribute('data-color')?.toLowerCase() === current) {
-          s.classList.add('active');
-        } else {
-          s.classList.remove('active');
-        }
-      });
-    });
-  }
-
+  // Event Listeners
   function setupEventListeners() {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      generateAllPasswords();
-    });
-
-    // Keyboard shortcuts: Ctrl+Enter or Cmd+Enter to generate
-    document.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-        e.preventDefault();
-        generateAllPasswords();
-      } else if (e.key === 'Escape' && document.activeElement.tagName === 'INPUT') {
-        document.activeElement.blur();
-      }
-    });
-
-    // Toggle Masking
-    btnToggleVisibility.addEventListener('click', togglePasswordMasking);
-
-    // Copy Primary
-    btnCopyPrimary.addEventListener('click', () => {
-      if (!currentPrimaryPassword) return;
-      copyToClipboard(currentPrimaryPassword, 'Primary fortress password copied');
-    });
-
-    // Copy All
-    btnCopyAll.addEventListener('click', () => {
-      if (generatedVariations.length === 0) return;
-      const allText = generatedVariations.map(v => `${v.category}: ${v.password}`).join('\n');
-      copyToClipboard(allText, 'All 8 password variations copied');
-    });
-
-    // Reset Form
-    btnReset.addEventListener('click', () => {
-      form.reset();
-      document.querySelectorAll('.color-swatch-btn').forEach(s => s.classList.remove('active'));
-      clearOutputs();
-      showToast('Vault parameters reset');
-    });
-
-    // Quick Demo
-    btnQuickDemo.addEventListener('click', () => {
-      loadDemoSeeds();
-      showToast('Loaded demo parameters');
-    });
-
-    // Real-time update on controls
-    [optLeet, optSymbols, optSalt, optUpper, optSeparator].forEach(ctrl => {
-      if (ctrl) {
-        ctrl.addEventListener('change', () => {
-          if (hasAnyInput()) {
-            generateAllPasswords();
-          }
+    // Inputs triggering live re-computation
+    const liveInputs = [inputName, inputDob, inputColor, inputCustom];
+    liveInputs.forEach(input => {
+      if (input) {
+        input.addEventListener('input', () => {
+          syncInputsWithScrubber();
+          generate();
         });
       }
     });
-  }
 
-  function loadDemoSeeds() {
-    inputName.value = 'Ares';
-    inputDob.value = '2000-05-15';
-    inputColor.value = 'Crimson';
-    inputCustom.value = 'Titan';
-
-    const crimsonBtn = document.querySelector('.color-swatch-btn[data-color="Crimson"]');
-    if (crimsonBtn) crimsonBtn.classList.add('active');
-
-    generateAllPasswords();
-  }
-
-  function hasAnyInput() {
-    return Boolean(
-      inputName.value.trim() ||
-      inputDob.value ||
-      inputColor.value.trim() ||
-      inputCustom.value.trim()
-    );
-  }
-
-  // Parse DOB into components
-  function parseDob(dobString) {
-    if (!dobString) {
-      return { year: '2025', shortYear: '25', month: '01', day: '01', numeric: '2025' };
-    }
-    const clean = dobString.replace(/[^0-9]/g, '');
-    let year = '2025';
-    let month = '01';
-    let day = '01';
-
-    if (dobString.includes('-')) {
-      const parts = dobString.split('-');
-      if (parts.length === 3) {
-        year = parts[0] || '2025';
-        month = parts[1] || '01';
-        day = parts[2] || '01';
+    // Options
+    const liveOptions = [optLeet, optSymbols, optSalt, optUpper, optSeparator];
+    liveOptions.forEach(opt => {
+      if (opt) {
+        opt.addEventListener('change', generate);
       }
-    } else if (clean.length >= 4) {
-      year = clean.slice(-4);
-      if (clean.length >= 8) {
-        day = clean.slice(0, 2);
-        month = clean.slice(2, 4);
-      }
+    });
+
+    // Shuffle word button
+    if (btnShuffleWord) {
+      btnShuffleWord.addEventListener('click', () => {
+        const randomWord = ANCHOR_WORDS[Math.floor(Math.random() * ANCHOR_WORDS.length)];
+        inputCustom.value = randomWord;
+        generate();
+        showToast(`Anchor shuffled to "${randomWord}"`);
+      });
     }
+
+    // Demo Data Button
+    if (btnDemoTrigger) {
+      btnDemoTrigger.addEventListener('click', () => {
+        inputName.value = 'Ares';
+        inputDob.value = '2000-05-15';
+        inputColor.value = 'Crimson';
+        inputCustom.value = 'Titan';
+        syncInputsWithScrubber();
+        syncSwatchesWithColor('Crimson');
+        generate();
+        showToast('Demo seed anchors loaded');
+      });
+    }
+
+    // Reset Button
+    if (btnResetTrigger) {
+      btnResetTrigger.addEventListener('click', () => {
+        inputName.value = '';
+        inputDob.value = '';
+        inputColor.value = '';
+        inputCustom.value = '';
+        generate();
+        showToast('All anchors cleared');
+      });
+    }
+
+    // Security Info Bell
+    if (btnSecurityInfo) {
+      btnSecurityInfo.addEventListener('click', () => {
+        showToast('100% Client-Side Sandbox: Zero network calls');
+      });
+    }
+
+    // Mask / Unmask Toggle
+    if (btnToggleVisibility) {
+      btnToggleVisibility.addEventListener('click', toggleVisibility);
+    }
+
+    // Copy Primary
+    if (btnCopyPrimary) {
+      btnCopyPrimary.addEventListener('click', copyPrimary);
+    }
+
+    // Copy All
+    if (btnCopyAll) {
+      btnCopyAll.addEventListener('click', copyAllArchetypes);
+    }
+
+    // Dock Navigation Scroll
+    if (dockBtnVault) {
+      dockBtnVault.addEventListener('click', () => {
+        setActiveDock(dockBtnVault);
+        document.getElementById('section-hero')?.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    if (dockBtnAnchors) {
+      dockBtnAnchors.addEventListener('click', () => {
+        setActiveDock(dockBtnAnchors);
+        document.getElementById('section-anchors')?.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    if (dockBtnArchetypes) {
+      dockBtnArchetypes.addEventListener('click', () => {
+        setActiveDock(dockBtnArchetypes);
+        document.getElementById('section-archetypes')?.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    if (dockBtnGuide) {
+      dockBtnGuide.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActiveDock(dockBtnGuide);
+        document.getElementById('usage-guide')?.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+  }
+
+  function setActiveDock(activeBtn) {
+    [dockBtnVault, dockBtnAnchors, dockBtnArchetypes, dockBtnGuide].forEach(btn => {
+      if (btn) btn.classList.remove('active');
+    });
+    if (activeBtn) activeBtn.classList.add('active');
+  }
+
+  // Era Scrubber Setup
+  function setupEraScrubber() {
+    eraCapsules.forEach(capsule => {
+      capsule.addEventListener('click', () => {
+        eraCapsules.forEach(c => c.classList.remove('active'));
+        capsule.classList.add('active');
+        const dob = capsule.getAttribute('data-dob');
+        if (dob && inputDob) {
+          inputDob.value = dob;
+          generate();
+        }
+      });
+    });
+
+    if (btnEraPrev && btnEraNext) {
+      btnEraPrev.addEventListener('click', () => shiftEra(-1));
+      btnEraNext.addEventListener('click', () => shiftEra(1));
+    }
+  }
+
+  function shiftEra(direction) {
+    const capsulesArr = Array.from(eraCapsules);
+    const activeIndex = capsulesArr.findIndex(c => c.classList.contains('active'));
+    let newIndex = activeIndex + direction;
+    if (newIndex < 0) newIndex = capsulesArr.length - 1;
+    if (newIndex >= capsulesArr.length) newIndex = 0;
+    capsulesArr[newIndex].click();
+  }
+
+  function syncInputsWithScrubber() {
+    if (!inputDob || !inputDob.value) return;
+    const year = inputDob.value.split('-')[0];
+    eraCapsules.forEach(capsule => {
+      if (capsule.getAttribute('data-year') === year) {
+        capsule.classList.add('active');
+      } else {
+        capsule.classList.remove('active');
+      }
+    });
+  }
+
+  // Matte Swatches Setup
+  function setupMatteSwatches() {
+    matteSwatches.forEach(swatch => {
+      swatch.addEventListener('click', () => {
+        matteSwatches.forEach(s => s.classList.remove('active'));
+        swatch.classList.add('active');
+        const colorName = swatch.getAttribute('data-color');
+        if (colorName && inputColor) {
+          inputColor.value = colorName;
+          generate();
+        }
+      });
+    });
+  }
+
+  function syncSwatchesWithColor(colorName) {
+    matteSwatches.forEach(swatch => {
+      if (swatch.getAttribute('data-color').toLowerCase() === (colorName || '').toLowerCase()) {
+        swatch.classList.add('active');
+      } else {
+        swatch.classList.remove('active');
+      }
+    });
+  }
+
+  // Preset Pills Setup
+  function setupPresetPills() {
+    presetPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        const name = pill.getAttribute('data-name');
+        if (name && inputName) {
+          inputName.value = name;
+          generate();
+        }
+      });
+    });
+  }
+
+  // Deterministic Hash Helper (FNV-1a 32-bit for client-side deterministic entropy salt)
+  function fnv1a(str) {
+    let hash = 0x811c9dc5;
+    for (let i = 0; i < str.length; i++) {
+      hash ^= str.charCodeAt(i);
+      hash = (hash * 0x01000193) >>> 0;
+    }
+    return hash;
+  }
+
+  // Apply Leet Substitution
+  function applyLeet(str) {
+    return str.split('').map(char => LEET_MAP[char] || char).join('');
+  }
+
+  // Cognitive Mnemonic Helpers for "Complicated yet Remembrable" Credentials
+  function toConsonants(word) {
+    if (!word) return '';
+    if (word.length <= 3) return word;
+    // Keep first letter, strip internal unstressed vowels
+    const first = word[0];
+    const rest = word.slice(1).replace(/[aeiou]/gi, '');
+    return first + rest;
+  }
+
+  function toMnemonicLeet(word, enableLeet) {
+    if (!word) return '';
+    if (!enableLeet) return word;
+    // Replace internal vowels with classic leet numbers: a->4, e->3, i->1, o->0
+    const leetVowels = {
+      'a': '4', 'A': '4',
+      'e': '3', 'E': '3',
+      'i': '1', 'I': '1',
+      'o': '0', 'O': '0'
+    };
+    return word.split('').map((c, i) => {
+      if (i === 0) return c; // preserve first letter casing
+      return leetVowels[c] || c;
+    }).join('');
+  }
+
+  // Primary Synthesis Engine
+  function generate() {
+    const rawName = (inputName?.value || 'Ares').trim();
+    const rawDob = (inputDob?.value || '2000-05-15').trim();
+    const rawColor = (inputColor?.value || 'Crimson').trim();
+    const rawCustom = (inputCustom?.value || 'Titan').trim();
+
+    const useLeet = optLeet?.checked ?? true;
+    const useSymbols = optSymbols?.checked ?? true;
+    const useSalt = optSalt?.checked ?? true;
+    const forceUpper = optUpper?.checked ?? false;
+    const separator = optSeparator?.value !== undefined ? optSeparator.value : '-';
+
+    // Parse DOB components
+    const dobParts = rawDob.split('-');
+    const year = dobParts[0] || '2000';
+    const month = dobParts[1] || '05';
+    const day = dobParts[2] || '15';
     const shortYear = year.slice(-2);
-    return { year, shortYear, month, day, numeric: clean || `${year}${month}${day}` };
-  }
+    const techYear = `2k${shortYear}`;
 
-  function toLeet(text) {
-    return text.split('').map(char => LEET_MAP[char] || char).join('');
-  }
+    // Compute deterministic salt token
+    const combinedEntropySeed = `${rawName}:${rawDob}:${rawColor}:${rawCustom}`;
+    const seedHash = fnv1a(combinedEntropySeed);
+    const saltToken = seedHash.toString(36).slice(0, 3);
 
-  function capitalize(str) {
-    if (!str) return '';
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
+    // Cognitive Obfuscated Anchors (Complicated & Remembrable)
+    const mName = toMnemonicLeet(rawName, useLeet);
+    const mColor = toMnemonicLeet(rawColor, useLeet);
+    const mCustom = toMnemonicLeet(rawCustom, useLeet);
 
-  function alternatingCase(str) {
-    return str.split('').map((c, i) => i % 2 === 0 ? c.toUpperCase() : c.toLowerCase()).join('');
-  }
+    const cName = toConsonants(rawName);
+    const cColor = toConsonants(rawColor);
+    const cCustom = toConsonants(rawCustom);
 
-  function generateSalt(length = 3) {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%';
-    const array = new Uint32Array(length);
-    window.crypto.getRandomValues(array);
-    let salt = '';
-    for (let i = 0; i < length; i++) {
-      salt += chars[array[i] % chars.length];
-    }
-    return salt;
-  }
+    // 1. Fortress Tactical (Hero Archetype - Multi-set cryptographic diffusion)
+    const sym1 = useSymbols ? '#' : '_';
+    const sym2 = useSymbols ? '$!' : '-';
+    const sym3 = useSymbols ? '$' : shortYear;
+    const sym4 = useSymbols ? '@' : '.';
+    const saltPart = useSalt ? `*${saltToken}` : '';
 
-  function sanitize(str) {
-    return (str || '').trim().replace(/\s+/g, '');
-  }
+    let fortressBase = `${mColor}${sym1}${mName}${sym2}${shortYear}${sym3}${mCustom}${sym4}${saltPart}`;
+    if (forceUpper) fortressBase = fortressBase.toUpperCase();
 
-  function generateAllPasswords() {
-    const rawName = sanitize(inputName.value) || 'Ares';
-    const rawColor = sanitize(inputColor.value) || 'Crimson';
-    const rawCustom = sanitize(inputCustom.value) || 'Vault';
-    const dobObj = parseDob(inputDob.value);
+    // 2. Memorable Passphrase (Cognitively Compounded & Obfuscated)
+    // Avoids naive dictionary words by using phonetic consonant/leet tokens
+    const phraseParts = [mColor, mName, shortYear, mCustom];
+    let memorablePassphrase = phraseParts.join(separator);
+    if (useSymbols && separator === '-') memorablePassphrase += '!';
+    if (forceUpper) memorablePassphrase = memorablePassphrase.toUpperCase();
 
-    const useLeet = optLeet ? optLeet.checked : true;
-    const useSymbols = optSymbols ? optSymbols.checked : true;
-    const useSalt = optSalt ? optSalt.checked : true;
-    const forceUpper = optUpper ? optUpper.checked : false;
-    const separator = optSeparator ? optSeparator.value : '-';
+    // 3. Enterprise Compliant (1 Upper, 1 Lower, 1 Digit, 1 Symbol - Un-guessable)
+    // E.g. Ar3s.Crmsn@2k36
+    const entSep1 = useSymbols ? '.' : '';
+    const entSep2 = useSymbols ? '@' : '';
+    let enterprise = `${mName}${entSep1}${cColor}${entSep2}${techYear}`;
+    if (!useSymbols) enterprise += shortYear;
+    if (forceUpper) enterprise = enterprise.toUpperCase();
 
-    const s1 = useSymbols ? '#' : (separator || '');
-    const s2 = useSymbols ? '!' : (separator || '');
-    const s3 = useSymbols ? '$' : (separator || '');
-    const s4 = useSymbols ? '*' : (separator || '');
+    // 4. Kebab Identifier (Phonetic consonant slug)
+    // E.g. ar3s-crmsn-ttn-36
+    let kebab = `${mName.toLowerCase()}-${cColor.toLowerCase()}-${cCustom.toLowerCase()}-${shortYear}`;
 
-    const saltToken = useSalt ? generateSalt(3) : '';
+    // 5. Developer CLI Token (API / Stripe format with obfuscated anchors & salt)
+    // E.g. ar3s_live_2k36_crm_ttn_kff
+    const devSalt = useSalt ? `_${saltToken}` : '';
+    let devToken = `${mName.toLowerCase()}_live_${techYear}_${cColor.toLowerCase().slice(0, 3)}_${cCustom.toLowerCase()}${devSalt}`;
+    if (forceUpper) devToken = devToken.toUpperCase();
 
-    let nameFormatted = capitalize(rawName);
-    let colorFormatted = capitalize(rawColor);
-    let customFormatted = capitalize(rawCustom);
+    // 6. Alphanumeric PIN (Strictly symbols-free for legacy enterprise/banking)
+    // Obfuscated with leet digits & consonant compaction so it's not a plain dictionary word
+    let alphanumeric = `${mName}${cColor}${shortYear}${mCustom}`.replace(/[^a-zA-Z0-9]/g, '');
+    if (forceUpper) alphanumeric = alphanumeric.toUpperCase();
 
-    if (forceUpper) {
-      nameFormatted = nameFormatted.toUpperCase();
-      colorFormatted = colorFormatted.toUpperCase();
-      customFormatted = customFormatted.toUpperCase();
-    }
+    // 7. Ultra High-Entropy (Maximum symbol diffusion & salt interleave)
+    let ultra = `#${mCustom}!${mName}!${saltToken}${mColor}${shortYear}*${cCustom.slice(0, 2)}`;
+    if (forceUpper) ultra = ultra.toUpperCase();
 
-    const nameLeet = useLeet ? toLeet(nameFormatted) : nameFormatted;
-    const colorLeet = useLeet ? toLeet(colorFormatted) : colorFormatted;
-    const customLeet = useLeet ? toLeet(customFormatted) : customFormatted;
+    // 8. Compact Mobile (12 chars, keypad friendly, high entropy)
+    const mobSym = useSymbols ? '!' : '';
+    let mobile = `${mName.slice(0, 3)}${mobSym}${cColor.slice(0, 3)}${shortYear}*${cCustom.slice(0, 2)}`;
+    if (forceUpper) mobile = mobile.toUpperCase();
 
-    // Archetype 1: Fortress Tactical (Default Primary)
-    const fortress = `${colorLeet}${s1}${nameLeet}${s2}${dobObj.shortYear}${s3}${customLeet}${saltToken ? s4 + saltToken : ''}`;
-
-    // Archetype 2: Memorable Passphrase
-    const sep = separator || '-';
-    const passphrase = `${colorFormatted}${sep}${nameFormatted}${sep}${dobObj.year}${sep}${customFormatted}`;
-
-    // Archetype 3: Ultra High-Entropy
-    const ultra = `${s1}${customLeet.slice(0, 3)}${s2}${nameLeet}${dobObj.day}${colorLeet.slice(0, 3)}${s3}${dobObj.shortYear}${saltToken ? s4 + saltToken : ''}`;
-
-    // Archetype 4: Alphanumeric PIN / Compact
-    const pin = `${nameFormatted.slice(0, 2)}${colorFormatted.slice(0, 2)}${dobObj.day}${dobObj.shortYear}${customFormatted.slice(0, 2)}`;
-
-    // Archetype 5: Titanium Leet
-    const leetTitanium = `${toLeet(nameFormatted)}_${toLeet(colorFormatted)}${dobObj.year}#${toLeet(customFormatted)}`;
-
-    // Archetype 6: Alternating Wave
-    const alternating = `${alternatingCase(nameFormatted)}${s1}${alternatingCase(colorFormatted)}${dobObj.shortYear}${s2}${customFormatted.toLowerCase()}`;
-
-    // Archetype 7: Minimalist Dot Vault
-    const dotVault = `${rawColor.toLowerCase()}.${rawName.toLowerCase()}.${dobObj.year}.${rawCustom.toLowerCase()}`;
-
-    // Archetype 8: Interleaved Matrix
-    const interleaved = `${s2}${colorFormatted}${s1}${nameLeet}${dobObj.shortYear}${s3}${customLeet}${s4}`;
-
-    currentPrimaryPassword = fortress;
-    renderPrimaryPassword(currentPrimaryPassword);
-
-    generatedVariations = [
-      { category: 'Fortress Tactical', password: fortress, desc: 'Primary credential with leetspeak, boundary symbols, and cryptographic salt' },
-      { category: 'Memorable Passphrase', password: passphrase, desc: 'Structured readable words ideal for touch screens and human recall' },
-      { category: 'Ultra High-Entropy', password: ultra, desc: 'Maximized computational complexity against offline dictionary attacks' },
-      { category: 'Alphanumeric Compact', password: pin, desc: 'Clean symbol-free string for restrictive legacy login fields' },
-      { category: 'Titanium Leet', password: leetTitanium, desc: 'Enterprise complexity standard with full alphanumeric mapping' },
-      { category: 'Alternating Wave', password: alternating, desc: 'Dynamic alternating casing cadence' },
-      { category: 'Minimalist Dot Vault', password: dotVault, desc: 'Structured hierarchy format for developers and terminals' },
-      { category: 'Interleaved Matrix', password: interleaved, desc: 'Symbol-framed sequence preventing credential stuffing' }
+    // Store generated variations
+    generatedArchetypes = [
+      {
+        id: 'fortress',
+        name: 'Fortress Tactical',
+        category: 'Fortress',
+        badgeClass: 'ongoing',
+        value: fortressBase,
+        description: 'Multi-set leet token with cryptographic seed salt'
+      },
+      {
+        id: 'memorable',
+        name: 'Memorable Passphrase',
+        category: 'Memorable',
+        badgeClass: 'complete',
+        value: memorablePassphrase,
+        description: 'Delimited cognitive shorthand (un-guessable from favorites)'
+      },
+      {
+        id: 'dev_token',
+        name: 'Developer CLI Token',
+        category: 'High Entropy',
+        badgeClass: 'ongoing',
+        value: devToken,
+        description: 'Standardized underscore slug for API keys & CLI'
+      },
+      {
+        id: 'alphanumeric',
+        name: 'Alphanumeric PIN',
+        category: 'Compatible',
+        badgeClass: 'neutral',
+        value: alphanumeric,
+        description: 'Zero special symbols for legacy form requirements'
+      },
+      {
+        id: 'ultra',
+        name: 'Ultra High-Entropy',
+        category: 'Maximum',
+        badgeClass: 'ongoing',
+        value: ultra,
+        description: 'Maximum symbol diffusion and shuffled anchors'
+      },
+      {
+        id: 'mobile',
+        name: 'Compact Mobile',
+        category: 'Compact',
+        badgeClass: 'complete',
+        value: mobile,
+        description: 'Optimized length for virtual keyboard inputs'
+      },
+      {
+        id: 'enterprise',
+        name: 'Enterprise Compliant',
+        category: 'Standard',
+        badgeClass: 'neutral',
+        value: enterprise,
+        description: 'Guarantees upper, lower, number and punctuation'
+      },
+      {
+        id: 'kebab',
+        name: 'Kebab Identifier',
+        category: 'Memorable',
+        badgeClass: 'complete',
+        value: kebab,
+        description: 'Clean hyphenated lowercase string'
+      }
     ];
 
-    renderVariations(generatedVariations);
-  }
+    // Update active primary password
+    const active = generatedArchetypes[activeArchetypeIndex] || generatedArchetypes[0];
+    currentPrimaryPassword = active.value;
 
-  function renderPrimaryPassword(pwd) {
-    if (isPasswordMasked) {
-      primaryDisplay.textContent = '•'.repeat(pwd.length);
-    } else {
-      primaryDisplay.textContent = pwd;
+    if (primaryDisplay) {
+      primaryDisplay.textContent = currentPrimaryPassword;
     }
-    primaryDisplay.classList.remove('empty');
 
-    const strength = evaluatePasswordStrength(pwd);
-    updateStrengthMeter(strength);
+    if (activeCredentialBadge) {
+      activeCredentialBadge.textContent = active.name;
+    }
+
+    // Compute metrics
+    computeMetrics(currentPrimaryPassword);
+
+    // Render Archetype list rows
+    renderArchetypesList();
   }
 
-  function renderVariations(variations) {
+  // Render Synthesized Archetypes Table (Matching "Challenges" in Reference)
+  function renderArchetypesList() {
+    if (!variationsList) return;
     variationsList.innerHTML = '';
-    variations.forEach(item => {
-      const row = document.createElement('div');
-      row.className = 'variations-row';
 
-      const displayPwd = isPasswordMasked ? '•'.repeat(item.password.length) : escapeHtml(item.password);
+    generatedArchetypes.forEach((item, index) => {
+      const isSelected = index === activeArchetypeIndex;
+      const row = document.createElement('div');
+      row.className = `archetype-item-row ${isSelected ? 'selected' : ''}`;
+      row.setAttribute('data-index', index);
 
       row.innerHTML = `
-        <div class="variation-meta">
-          <div class="variation-label-row">
-            <span class="variation-category-badge">${escapeHtml(item.category)}</span>
+        <div class="row-left-content">
+          <div class="row-circle-indicator ${isSelected ? 'completed' : ''}">
+            ${isSelected ? `
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            ` : ''}
           </div>
-          <span class="variation-code-string tabular-numbers">${displayPwd}</span>
+          <div class="row-text-group">
+            <span class="row-name">${escapeHtml(item.name)}</span>
+            <span class="row-preview-string">${escapeHtml(item.value)}</span>
+          </div>
         </div>
-        <button type="button" class="row-copy-btn" data-password="${escapeHtml(item.password)}" aria-label="Copy ${escapeHtml(item.category)}">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span>Copy</span>
-        </button>
+
+        <div class="row-right-actions">
+          <span class="status-pill-badge ${item.badgeClass}">${escapeHtml(item.category)}</span>
+          <button type="button" class="row-copy-icon-btn" data-copy-index="${index}" title="Copy to clipboard">
+            <svg class="copy-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </button>
+        </div>
       `;
 
-      const copyBtn = row.querySelector('.row-copy-btn');
-      copyBtn.addEventListener('click', () => {
-        copyToClipboard(item.password, `${item.category} copied`);
-        copyBtn.classList.add('copied');
-        copyBtn.querySelector('span').textContent = 'Copied';
-        setTimeout(() => {
-          copyBtn.classList.remove('copied');
-          copyBtn.querySelector('span').textContent = 'Copy';
-        }, 1500);
+      // Clicking row inspects & sets as active primary credential
+      row.addEventListener('click', (e) => {
+        if (e.target.closest('.row-copy-icon-btn')) return;
+        activeArchetypeIndex = index;
+        const selected = generatedArchetypes[index];
+        currentPrimaryPassword = selected.value;
+        if (primaryDisplay) primaryDisplay.textContent = currentPrimaryPassword;
+        if (activeCredentialBadge) activeCredentialBadge.textContent = selected.name;
+        computeMetrics(currentPrimaryPassword);
+        renderArchetypesList();
+        showToast(`Inspecting ${selected.name}`);
       });
+
+      // Clicking copy icon button
+      const copyBtn = row.querySelector('.row-copy-icon-btn');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          copyToClipboard(item.value, () => {
+            copyBtn.classList.add('copied');
+            copyBtn.innerHTML = `
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            `;
+            setTimeout(() => {
+              copyBtn.classList.remove('copied');
+              copyBtn.innerHTML = `
+                <svg class="copy-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              `;
+            }, 1800);
+            showToast(`Copied ${item.name} to clipboard`);
+          });
+        });
+      }
 
       variationsList.appendChild(row);
     });
   }
 
-  function togglePasswordMasking() {
-    isPasswordMasked = !isPasswordMasked;
-    if (isPasswordMasked) {
-      iconEyeOpen.style.display = 'none';
-      iconEyeClosed.style.display = 'block';
-      btnToggleVisibility.setAttribute('aria-label', 'Reveal password');
-    } else {
-      iconEyeOpen.style.display = 'block';
-      iconEyeClosed.style.display = 'none';
-      btnToggleVisibility.setAttribute('aria-label', 'Hide password');
-    }
-    renderPrimaryPassword(currentPrimaryPassword);
-    renderVariations(generatedVariations);
-  }
-
-  function clearOutputs() {
-    currentPrimaryPassword = '';
-    generatedVariations = [];
-    primaryDisplay.textContent = 'Fill seeds to generate';
-    primaryDisplay.classList.add('empty');
-    variationsList.innerHTML = '';
-    updateStrengthMeter({ score: 0, label: 'Waiting', entropy: 0, crackTime: 'Instant' });
-  }
-
-  function evaluatePasswordStrength(password) {
-    if (!password) {
-      return { score: 0, label: 'Empty', entropy: 0, crackTime: '0s' };
-    }
-
-    let poolSize = 0;
-    if (/[a-z]/.test(password)) poolSize += 26;
-    if (/[A-Z]/.test(password)) poolSize += 26;
-    if (/[0-9]/.test(password)) poolSize += 10;
-    if (/[^a-zA-Z0-9]/.test(password)) poolSize += 33;
-
-    if (poolSize === 0) poolSize = 1;
-
-    // Shannon Entropy: L * log2(poolSize)
-    const entropy = Math.round(password.length * Math.log2(poolSize));
-
-    // Crack time estimation based on 10^10 guesses per second
-    const combinations = Math.pow(poolSize, Math.min(password.length, 32));
-    const seconds = combinations / 10000000000;
-
-    let crackTime = 'Instant';
-    if (seconds > 31536000000000) {
-      crackTime = 'Centuries';
-    } else if (seconds > 31536000) {
-      crackTime = `${Math.round(seconds / 31536000)} Years`;
-    } else if (seconds > 86400) {
-      crackTime = `${Math.round(seconds / 86400)} Days`;
-    } else if (seconds > 3600) {
-      crackTime = `${Math.round(seconds / 3600)} Hours`;
-    } else if (seconds > 60) {
-      crackTime = `${Math.round(seconds / 60)} Mins`;
-    } else if (seconds > 1) {
-      crackTime = `${Math.round(seconds)} Secs`;
-    }
-
-    let score = 1;
-    let label = 'Weak';
-
-    if (entropy >= 80 && password.length >= 14) {
-      score = 4;
-      label = 'Fortress';
-    } else if (entropy >= 60 && password.length >= 10) {
-      score = 3;
-      label = 'Strong';
-    } else if (entropy >= 40) {
-      score = 2;
-      label = 'Moderate';
-    }
-
-    return { score, label, entropy, crackTime };
-  }
-
-  function updateStrengthMeter(strength) {
-    primaryStrengthValue.textContent = strength.label;
-    strengthCrackTime.textContent = strength.crackTime;
-    strengthEntropy.textContent = `${strength.entropy} bits`;
-
-    // Update Top Overview Metrics Strip
-    if (overviewRating) overviewRating.textContent = strength.label;
-    if (overviewDesc) overviewDesc.textContent = `${strength.entropy} bits Shannon entropy`;
-    if (overviewCrackTime) overviewCrackTime.textContent = strength.crackTime;
-
-    // Clear segments
-    strengthSegments.forEach(seg => {
-      seg.className = 'strength-bar-cell';
-    });
-
-    for (let i = 0; i < strength.score; i++) {
-      if (strengthSegments[i]) {
-        if (strength.score === 1) strengthSegments[i].classList.add('score-weak');
-        else if (strength.score === 2) strengthSegments[i].classList.add('score-fair');
-        else if (strength.score === 3) strengthSegments[i].classList.add('score-good');
-        else if (strength.score >= 4) strengthSegments[i].classList.add('score-strong');
-      }
-    }
-  }
-
-  // Sonner-inspired toast notification
-  function copyToClipboard(text, message) {
-    if (!navigator.clipboard) {
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textarea);
-      showToast(message);
+  // Calculate Shannon Entropy & Crack Resistance
+  function computeMetrics(pwd) {
+    if (!pwd) {
+      updateMetricDisplays(0, 'Minimal', 'Instant');
       return;
     }
 
-    navigator.clipboard.writeText(text).then(() => {
-      showToast(message);
-    }).catch(err => {
-      console.error('Copy failed:', err);
-      showToast('Failed to copy to clipboard');
+    let poolSize = 0;
+    if (/[a-z]/.test(pwd)) poolSize += 26;
+    if (/[A-Z]/.test(pwd)) poolSize += 26;
+    if (/[0-9]/.test(pwd)) poolSize += 10;
+    if (/[^a-zA-Z0-9]/.test(pwd)) poolSize += 33;
+    if (poolSize === 0) poolSize = 26;
+
+    const entropyBits = Math.round(pwd.length * (Math.log(poolSize) / Math.log(2)));
+
+    let rating = 'Fortress';
+    let crackTime = 'Centuries';
+    let activeSegments = 4;
+
+    if (entropyBits < 40) {
+      rating = 'Weak';
+      crackTime = 'Seconds';
+      activeSegments = 1;
+    } else if (entropyBits < 60) {
+      rating = 'Moderate';
+      crackTime = 'Hours';
+      activeSegments = 2;
+    } else if (entropyBits < 90) {
+      rating = 'Strong';
+      crackTime = 'Decades';
+      activeSegments = 3;
+    } else {
+      rating = 'Fortress';
+      crackTime = 'Centuries';
+      activeSegments = 4;
+    }
+
+    updateMetricDisplays(entropyBits, rating, crackTime, activeSegments);
+  }
+
+  function updateMetricDisplays(entropyBits, rating, crackTime, activeSegments) {
+    if (strengthValue) strengthValue.textContent = rating;
+    if (strengthCrackTime) strengthCrackTime.textContent = crackTime;
+    if (strengthEntropy) strengthEntropy.textContent = `${entropyBits} bits`;
+
+    if (overviewEntropyRating) overviewEntropyRating.textContent = rating;
+    if (overviewEntropyDesc) overviewEntropyDesc.textContent = `${entropyBits} bits Shannon`;
+    if (overviewCrackTime) overviewCrackTime.textContent = crackTime;
+
+    // Segmented bar
+    strengthSegments.forEach((seg, i) => {
+      if (!seg) return;
+      if (i < activeSegments) {
+        seg.className = 'strength-seg active';
+      } else {
+        seg.className = 'strength-seg';
+      }
     });
   }
 
-  let toastTimeout = null;
+  // Visibility Toggle
+  function toggleVisibility() {
+    isPasswordMasked = !isPasswordMasked;
+    if (primaryDisplay) {
+      primaryDisplay.classList.toggle('masked', isPasswordMasked);
+    }
+    if (iconEyeOpen && iconEyeClosed) {
+      iconEyeOpen.style.display = isPasswordMasked ? 'none' : 'block';
+      iconEyeClosed.style.display = isPasswordMasked ? 'block' : 'none';
+    }
+    showToast(isPasswordMasked ? 'Password masked' : 'Password revealed');
+  }
+
+  // Copy Primary Credential
+  function copyPrimary() {
+    if (!currentPrimaryPassword) return;
+    copyToClipboard(currentPrimaryPassword, () => {
+      if (btnCopyPrimary) {
+        btnCopyPrimary.classList.add('copied');
+        if (copyPrimaryLabel) copyPrimaryLabel.textContent = 'Copied';
+        setTimeout(() => {
+          btnCopyPrimary.classList.remove('copied');
+          if (copyPrimaryLabel) copyPrimaryLabel.textContent = 'Copy';
+        }, 1800);
+      }
+      showToast('Primary credential copied to clipboard');
+    });
+  }
+
+  // Copy All Archetypes
+  function copyAllArchetypes() {
+    if (!generatedArchetypes.length) return;
+    const formatted = generatedArchetypes
+      .map(item => `${item.name}:\n${item.value}`)
+      .join('\n\n');
+
+    copyToClipboard(formatted, () => {
+      showToast('All 8 synthesized archetypes copied');
+    });
+  }
+
+  // Generic Clipboard Wrapper
+  function copyToClipboard(text, onSuccess) {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(onSuccess).catch(() => fallbackCopy(text, onSuccess));
+    } else {
+      fallbackCopy(text, onSuccess);
+    }
+  }
+
+  function fallbackCopy(text, onSuccess) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand('copy');
+      if (onSuccess) onSuccess();
+    } catch (e) {
+      console.error('Clipboard copy failed', e);
+    }
+    document.body.removeChild(textarea);
+  }
+
+  // Subtle Toast
   function showToast(message) {
     if (!toast || !toastMessage) return;
     toastMessage.textContent = message;
-    toast.classList.add('active');
-
-    if (toastTimeout) clearTimeout(toastTimeout);
-    toastTimeout = setTimeout(() => {
-      toast.classList.remove('active');
+    toast.classList.add('visible');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.remove('visible');
     }, 2400);
   }
 
   function escapeHtml(str) {
-    return str
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
   }
 
+  // Run on DOM ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
