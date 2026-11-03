@@ -63,12 +63,26 @@
     document.getElementById('seg-4')
   ];
 
-  // DOM Elements - Overview Metrics
-  const overviewEntropyRating = document.getElementById('overview-entropy-rating');
-  const overviewEntropyDesc = document.getElementById('overview-entropy-desc');
-  const overviewCrackTime = document.getElementById('overview-crack-time');
-  const variationsList = document.getElementById('variations-list');
+  // DOM Elements - Format Stepper & Capsule Controls (Card 1)
+  const archetypeCounterCurrent = document.getElementById('archetype-counter-current');
+  const archetypeCounterTotal = document.getElementById('archetype-counter-total');
+  const btnArchetypePrev = document.getElementById('btn-archetype-prev');
+  const btnArchetypeNext = document.getElementById('btn-archetype-next');
+  const archetypeName = document.getElementById('archetype-name');
+  const archetypeDesc = document.getElementById('archetype-desc');
+  const archetypeCategoryBadge = document.getElementById('archetype-category-badge');
+  const archetypePipsTrack = document.getElementById('archetype-pips-track');
   const btnCopyAll = document.getElementById('btn-copy-all');
+  const btnSaveHeroVault = document.getElementById('btn-save-hero-vault');
+
+  // DOM Elements - Saved Credentials Vault (Card 2)
+  const inputVaultLabel = document.getElementById('input-vault-label');
+  const btnSaveCurrentToVault = document.getElementById('btn-save-current-to-vault');
+  const vaultItemsList = document.getElementById('vault-items-list');
+  const vaultCountBadge = document.getElementById('vault-count-badge');
+  const vaultEmptyState = document.getElementById('vault-empty-state');
+  const btnExportVault = document.getElementById('btn-export-vault');
+  const btnClearVault = document.getElementById('btn-clear-vault');
 
   // Toast
   const toast = document.getElementById('toast');
@@ -112,7 +126,9 @@
 
   // Theme Management
   function initTheme() {
-    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || document.documentElement.getAttribute('data-theme') || 'dark';
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlTheme = urlParams.get('theme');
+    const savedTheme = urlTheme || localStorage.getItem(THEME_STORAGE_KEY) || document.documentElement.getAttribute('data-theme') || 'dark';
     applyTheme(savedTheme);
 
     if (dockBtnTheme) {
@@ -213,10 +229,69 @@
       btnCopyPrimary.addEventListener('click', copyPrimary);
     }
 
+    // Prev / Next Archetype Navigation
+    if (btnArchetypePrev) {
+      btnArchetypePrev.addEventListener('click', () => {
+        if (!generatedArchetypes.length) return;
+        activeArchetypeIndex = (activeArchetypeIndex - 1 + generatedArchetypes.length) % generatedArchetypes.length;
+        renderActiveArchetype();
+      });
+    }
+
+    if (btnArchetypeNext) {
+      btnArchetypeNext.addEventListener('click', () => {
+        if (!generatedArchetypes.length) return;
+        activeArchetypeIndex = (activeArchetypeIndex + 1) % generatedArchetypes.length;
+        renderActiveArchetype();
+      });
+    }
+
+    // Static Pip Buttons
+    if (archetypePipsTrack) {
+      const pipBtns = archetypePipsTrack.querySelectorAll('.archetype-pip-btn');
+      pipBtns.forEach((btn, index) => {
+        btn.addEventListener('click', () => {
+          activeArchetypeIndex = index;
+          renderActiveArchetype();
+          const item = generatedArchetypes[index];
+          if (item) showToast(`Viewing ${item.name} (${index + 1}/8)`);
+        });
+      });
+    }
+
     // Copy All
     if (btnCopyAll) {
       btnCopyAll.addEventListener('click', copyAllArchetypes);
     }
+
+    // Save to Vault Handlers (Card 1 & Card 2)
+    if (btnSaveHeroVault) {
+      btnSaveHeroVault.addEventListener('click', () => saveActiveCredential());
+    }
+
+    if (btnSaveCurrentToVault) {
+      btnSaveCurrentToVault.addEventListener('click', () => saveActiveCredential());
+    }
+
+    if (inputVaultLabel) {
+      inputVaultLabel.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          saveActiveCredential();
+        }
+      });
+    }
+
+    if (btnExportVault) {
+      btnExportVault.addEventListener('click', exportVault);
+    }
+
+    if (btnClearVault) {
+      btnClearVault.addEventListener('click', clearVault);
+    }
+
+    // Initialize Saved Vault items from localStorage
+    initSavedVault();
 
     // Dock Navigation Scroll
     if (dockBtnVault) {
@@ -236,7 +311,8 @@
     if (dockBtnArchetypes) {
       dockBtnArchetypes.addEventListener('click', () => {
         setActiveDock(dockBtnArchetypes);
-        document.getElementById('section-archetypes')?.scrollIntoView({ behavior: 'smooth' });
+        const targetSection = document.getElementById('section-vault') || document.getElementById('section-hero');
+        targetSection?.scrollIntoView({ behavior: 'smooth' });
       });
     }
 
@@ -468,7 +544,15 @@
         category: 'Fortress',
         badgeClass: 'ongoing',
         value: fortressBase,
-        description: 'Multi-set leet token with cryptographic seed salt'
+        description: 'Multi-set leet token with cryptographic seed salt',
+        tokens: [
+          { label: 'Color', val: mColor, type: 'chip-color' },
+          { label: 'Salt', val: sym1, type: 'chip-salt' },
+          { label: 'Handle', val: mName, type: 'chip-handle' },
+          { label: 'Epoch', val: `${sym2}${shortYear}${sym3}`, type: 'chip-epoch' },
+          { label: 'Anchor', val: mCustom, type: 'chip-word' },
+          { label: 'Noise', val: `${sym4}${saltPart}`, type: 'chip-noise' }
+        ]
       },
       {
         id: 'memorable',
@@ -476,7 +560,16 @@
         category: 'Memorable',
         badgeClass: 'complete',
         value: memorablePassphrase,
-        description: 'Delimited cognitive shorthand (un-guessable from favorites)'
+        description: 'Delimited cognitive shorthand (un-guessable from favorites)',
+        tokens: [
+          { label: 'Color', val: mColor, type: 'chip-color' },
+          { label: 'Sep', val: separator, type: 'chip-salt' },
+          { label: 'Handle', val: mName, type: 'chip-handle' },
+          { label: 'Sep', val: separator, type: 'chip-salt' },
+          { label: 'Epoch', val: shortYear, type: 'chip-epoch' },
+          { label: 'Sep', val: separator, type: 'chip-salt' },
+          { label: 'Anchor', val: mCustom, type: 'chip-word' }
+        ]
       },
       {
         id: 'dev_token',
@@ -484,7 +577,15 @@
         category: 'High Entropy',
         badgeClass: 'ongoing',
         value: devToken,
-        description: 'Standardized underscore slug for API keys & CLI'
+        description: 'Standardized underscore slug for API keys & CLI',
+        tokens: [
+          { label: 'Handle', val: mName.toLowerCase(), type: 'chip-handle' },
+          { label: 'Tag', val: '_live_', type: 'chip-noise' },
+          { label: 'Epoch', val: techYear, type: 'chip-epoch' },
+          { label: 'Color', val: cColor.toLowerCase().slice(0, 3), type: 'chip-color' },
+          { label: 'Anchor', val: cCustom.toLowerCase(), type: 'chip-word' },
+          { label: 'Salt', val: devSalt, type: 'chip-salt' }
+        ]
       },
       {
         id: 'alphanumeric',
@@ -492,7 +593,13 @@
         category: 'Compatible',
         badgeClass: 'neutral',
         value: alphanumeric,
-        description: 'Zero special symbols for legacy form requirements'
+        description: 'Zero special symbols for legacy form requirements',
+        tokens: [
+          { label: 'Handle', val: mName, type: 'chip-handle' },
+          { label: 'Color', val: cColor, type: 'chip-color' },
+          { label: 'Epoch', val: shortYear, type: 'chip-epoch' },
+          { label: 'Anchor', val: mCustom, type: 'chip-word' }
+        ]
       },
       {
         id: 'ultra',
@@ -500,7 +607,16 @@
         category: 'Maximum',
         badgeClass: 'ongoing',
         value: ultra,
-        description: 'Maximum symbol diffusion and shuffled anchors'
+        description: 'Maximum symbol diffusion and shuffled anchors',
+        tokens: [
+          { label: 'Prefix', val: '#', type: 'chip-salt' },
+          { label: 'Anchor', val: mCustom, type: 'chip-word' },
+          { label: 'Sep', val: '!', type: 'chip-salt' },
+          { label: 'Handle', val: mName, type: 'chip-handle' },
+          { label: 'Salt', val: saltToken, type: 'chip-noise' },
+          { label: 'Color', val: mColor, type: 'chip-color' },
+          { label: 'Epoch', val: shortYear, type: 'chip-epoch' }
+        ]
       },
       {
         id: 'mobile',
@@ -508,7 +624,14 @@
         category: 'Compact',
         badgeClass: 'complete',
         value: mobile,
-        description: 'Optimized length for virtual keyboard inputs'
+        description: 'Optimized length for virtual keyboard inputs',
+        tokens: [
+          { label: 'Handle', val: mName.slice(0, 3), type: 'chip-handle' },
+          { label: 'Sym', val: mobSym, type: 'chip-salt' },
+          { label: 'Color', val: cColor.slice(0, 3), type: 'chip-color' },
+          { label: 'Epoch', val: shortYear, type: 'chip-epoch' },
+          { label: 'Anchor', val: cCustom.slice(0, 2), type: 'chip-word' }
+        ]
       },
       {
         id: 'enterprise',
@@ -516,7 +639,14 @@
         category: 'Standard',
         badgeClass: 'neutral',
         value: enterprise,
-        description: 'Guarantees upper, lower, number and punctuation'
+        description: 'Guarantees upper, lower, number and punctuation',
+        tokens: [
+          { label: 'Handle', val: mName, type: 'chip-handle' },
+          { label: 'Sep', val: entSep1 || '.', type: 'chip-salt' },
+          { label: 'Color', val: cColor, type: 'chip-color' },
+          { label: 'Sep', val: entSep2 || '@', type: 'chip-noise' },
+          { label: 'Epoch', val: techYear, type: 'chip-epoch' }
+        ]
       },
       {
         id: 'kebab',
@@ -524,107 +654,315 @@
         category: 'Memorable',
         badgeClass: 'complete',
         value: kebab,
-        description: 'Clean hyphenated lowercase string'
+        description: 'Clean hyphenated lowercase string',
+        tokens: [
+          { label: 'Handle', val: mName.toLowerCase(), type: 'chip-handle' },
+          { label: 'Sep', val: '-', type: 'chip-salt' },
+          { label: 'Color', val: cColor.toLowerCase(), type: 'chip-color' },
+          { label: 'Sep', val: '-', type: 'chip-salt' },
+          { label: 'Anchor', val: cCustom.toLowerCase(), type: 'chip-word' },
+          { label: 'Sep', val: '-', type: 'chip-salt' },
+          { label: 'Epoch', val: shortYear, type: 'chip-epoch' }
+        ]
       }
     ];
 
-    // Update active primary password
-    const active = generatedArchetypes[activeArchetypeIndex] || generatedArchetypes[0];
-    currentPrimaryPassword = active.value;
+    // Render Single Active Archetype Showcase & Synchronize Hero
+    renderActiveArchetype();
+  }
 
+  // Render Single Active Archetype (Focused Switcher Deck)
+  function renderActiveArchetype() {
+    if (!generatedArchetypes.length) return;
+    if (activeArchetypeIndex < 0) activeArchetypeIndex = 0;
+    if (activeArchetypeIndex >= generatedArchetypes.length) activeArchetypeIndex = 0;
+
+    const active = generatedArchetypes[activeArchetypeIndex];
+
+    // 1. Counter "1 / 8"
+    if (archetypeCounterCurrent) archetypeCounterCurrent.textContent = activeArchetypeIndex + 1;
+    if (archetypeCounterTotal) archetypeCounterTotal.textContent = generatedArchetypes.length;
+
+    // 2. Name & Description & Category Badge
+    if (archetypeName) archetypeName.textContent = active.name;
+    if (archetypeDesc) archetypeDesc.textContent = active.description;
+    if (archetypeCategoryBadge) {
+      archetypeCategoryBadge.textContent = active.category;
+      archetypeCategoryBadge.className = `status-pill-badge pill-${active.badgeClass}`;
+    }
+
+    // 3. Synchronize Primary Hero Display and Metrics
+    currentPrimaryPassword = active.value;
     if (primaryDisplay) {
       primaryDisplay.textContent = currentPrimaryPassword;
     }
-
     if (activeCredentialBadge) {
       activeCredentialBadge.textContent = active.name;
     }
-
-    // Compute metrics
     computeMetrics(currentPrimaryPassword);
 
-    // Render Archetype list rows
-    renderArchetypesList();
+    // 4. Update Numbered Capsule Pips in Track (1 to 8)
+    renderArchetypePips();
+
+    // 5. Ensure mask blur is synchronously applied
+    applyMaskState();
   }
 
-  // Render Synthesized Archetypes Table (Matching "Challenges" in Reference)
-  function renderArchetypesList() {
-    if (!variationsList) return;
-    variationsList.innerHTML = '';
+  // ==========================================================================
+  // Saved Credentials Vault (Card 2)
+  // ==========================================================================
+  const VAULT_STORAGE_KEY = 'ares_saved_vault_items';
+  let savedVaultItems = [];
 
-    generatedArchetypes.forEach((item, index) => {
-      const isSelected = index === activeArchetypeIndex;
+  // Initialize Saved Vault
+  function initSavedVault() {
+    try {
+      const stored = localStorage.getItem(VAULT_STORAGE_KEY);
+      if (stored) {
+        savedVaultItems = JSON.parse(stored);
+      } else {
+        // Pre-populate with 3 clean, practical starter items from current seeds
+        savedVaultItems = [
+          {
+            id: 'sample-1',
+            label: 'Google Account',
+            format: 'Fortress Tactical',
+            value: generatedArchetypes[0]?.value || 'Cr1ms0n#Ar3s$!00$T1t4n@*8rv',
+            createdAt: new Date().toLocaleDateString()
+          },
+          {
+            id: 'sample-2',
+            label: 'GitHub Developer Token',
+            format: 'Developer CLI Token',
+            value: generatedArchetypes[2]?.value || 'ar3s_live_2k00_crm_ttn_8rv',
+            createdAt: new Date().toLocaleDateString()
+          },
+          {
+            id: 'sample-3',
+            label: 'Home Wi-Fi Network',
+            format: 'Memorable Passphrase',
+            value: generatedArchetypes[1]?.value || 'Cr1ms0n-Ar3s-00-T1t4n!',
+            createdAt: new Date().toLocaleDateString()
+          }
+        ];
+        saveVaultToStorage();
+      }
+    } catch (e) {
+      savedVaultItems = [];
+    }
+    renderVaultList();
+  }
+
+  function saveVaultToStorage() {
+    try {
+      localStorage.setItem(VAULT_STORAGE_KEY, JSON.stringify(savedVaultItems));
+    } catch (e) {}
+  }
+
+  // Render Saved Vault Items List
+  function renderVaultList() {
+    if (!vaultItemsList) return;
+    vaultItemsList.innerHTML = '';
+
+    const count = savedVaultItems.length;
+    if (vaultCountBadge) {
+      vaultCountBadge.textContent = `${count} Saved`;
+    }
+
+    if (count === 0) {
+      if (vaultEmptyState) vaultEmptyState.style.display = 'flex';
+      return;
+    }
+
+    if (vaultEmptyState) vaultEmptyState.style.display = 'none';
+
+    savedVaultItems.forEach(item => {
       const row = document.createElement('div');
-      row.className = `archetype-item-row ${isSelected ? 'selected' : ''}`;
-      row.setAttribute('data-index', index);
+      row.className = 'vault-item-row';
+      row.setAttribute('data-id', item.id);
+
+      // Initial letters for avatar (e.g. "G" for Google, "GH" for GitHub)
+      const words = item.label.split(/\s+/).filter(Boolean);
+      let initial = words[0] ? words[0].slice(0, 1) : 'V';
+      if (words.length > 1 && words[1]) {
+        initial += words[1].slice(0, 1);
+      }
+      initial = initial.toUpperCase();
 
       row.innerHTML = `
-        <div class="row-left-content">
-          <div class="row-circle-indicator ${isSelected ? 'completed' : ''}">
-            ${isSelected ? `
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            ` : ''}
-          </div>
-          <div class="row-text-group">
-            <span class="row-name">${escapeHtml(item.name)}</span>
-            <span class="row-preview-string">${escapeHtml(item.value)}</span>
+        <div class="vault-item-left">
+          <div class="vault-service-avatar">${escapeHtml(initial)}</div>
+          <div class="vault-service-details">
+            <div class="vault-service-title-row">
+              <span class="vault-service-name">${escapeHtml(item.label)}</span>
+              <span class="status-pill-badge pill-ongoing">${escapeHtml(item.format || 'Tactical')}</span>
+            </div>
+            <div class="vault-service-pwd-wrap">
+              <span class="vault-pwd-masked">••••••••••••••••••••</span>
+              <span class="vault-pwd-plain" style="display: none;">${escapeHtml(item.value)}</span>
+            </div>
           </div>
         </div>
-
-        <div class="row-right-actions">
-          <span class="status-pill-badge ${item.badgeClass}">${escapeHtml(item.category)}</span>
-          <button type="button" class="row-copy-icon-btn" data-copy-index="${index}" title="Copy to clipboard">
-            <svg class="copy-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div class="vault-item-actions">
+          <button type="button" class="btn-vault-action-small btn-vault-toggle-eye" title="Reveal / Hide Password">
+            <svg class="eye-open-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            <svg class="eye-closed-svg" style="display: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+              <line x1="1" y1="1" x2="23" y2="23"></line>
+            </svg>
+          </button>
+          <button type="button" class="copy-archetype-btn btn-vault-copy" title="Copy password">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span class="copy-label">Copy</span>
+          </button>
+          <button type="button" class="btn-vault-action-small btn-vault-delete" title="Delete credential">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
             </svg>
           </button>
         </div>
       `;
 
-      // Clicking row inspects & sets as active primary credential
-      row.addEventListener('click', (e) => {
-        if (e.target.closest('.row-copy-icon-btn')) return;
-        activeArchetypeIndex = index;
-        const selected = generatedArchetypes[index];
-        currentPrimaryPassword = selected.value;
-        if (primaryDisplay) primaryDisplay.textContent = currentPrimaryPassword;
-        if (activeCredentialBadge) activeCredentialBadge.textContent = selected.name;
-        computeMetrics(currentPrimaryPassword);
-        renderArchetypesList();
-        showToast(`Inspecting ${selected.name}`);
+      // Wire Eye Toggle
+      const btnEye = row.querySelector('.btn-vault-toggle-eye');
+      const pwdMasked = row.querySelector('.vault-pwd-masked');
+      const pwdPlain = row.querySelector('.vault-pwd-plain');
+      const iconOpen = row.querySelector('.eye-open-svg');
+      const iconClosed = row.querySelector('.eye-closed-svg');
+
+      btnEye?.addEventListener('click', () => {
+        const isCurrentlyMasked = pwdPlain.style.display === 'none';
+        pwdPlain.style.display = isCurrentlyMasked ? 'inline' : 'none';
+        pwdMasked.style.display = isCurrentlyMasked ? 'none' : 'inline';
+        if (iconOpen) iconOpen.style.display = isCurrentlyMasked ? 'none' : 'block';
+        if (iconClosed) iconClosed.style.display = isCurrentlyMasked ? 'block' : 'none';
       });
 
-      // Clicking copy icon button
-      const copyBtn = row.querySelector('.row-copy-icon-btn');
-      if (copyBtn) {
-        copyBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          copyToClipboard(item.value, () => {
-            copyBtn.classList.add('copied');
-            copyBtn.innerHTML = `
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            `;
-            setTimeout(() => {
-              copyBtn.classList.remove('copied');
-              copyBtn.innerHTML = `
-                <svg class="copy-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-              `;
-            }, 1800);
-            showToast(`Copied ${item.name} to clipboard`);
-          });
+      // Wire Copy Button
+      const btnCopy = row.querySelector('.btn-vault-copy');
+      const copyLabel = row.querySelector('.copy-label');
+      btnCopy?.addEventListener('click', () => {
+        copyToClipboard(item.value, () => {
+          btnCopy.classList.add('copied');
+          if (copyLabel) copyLabel.textContent = 'Copied';
+          setTimeout(() => {
+            btnCopy.classList.remove('copied');
+            if (copyLabel) copyLabel.textContent = 'Copy';
+          }, 1800);
+          showToast(`Copied ${item.label} password`);
         });
-      }
+      });
 
-      variationsList.appendChild(row);
+      // Wire Delete Button
+      const btnDel = row.querySelector('.btn-vault-delete');
+      btnDel?.addEventListener('click', () => {
+        deleteVaultItem(item.id);
+      });
+
+      vaultItemsList.appendChild(row);
     });
+  }
+
+  // Save Active Credential into Saved Vault
+  function saveActiveCredential(customLabel) {
+    if (!currentPrimaryPassword) return;
+    const active = generatedArchetypes[activeArchetypeIndex] || {};
+    const inputVal = inputVaultLabel?.value.trim();
+    const label = customLabel || inputVal || `${active.name || 'Credential'} (${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`;
+
+    const newItem = {
+      id: `item-${Date.now()}`,
+      label: label,
+      format: active.name || 'Tactical',
+      value: currentPrimaryPassword,
+      createdAt: new Date().toLocaleDateString()
+    };
+
+    savedVaultItems.unshift(newItem);
+    saveVaultToStorage();
+    renderVaultList();
+
+    if (inputVaultLabel) inputVaultLabel.value = '';
+    showToast(`Saved "${label}" to vault!`);
+
+    // Smooth scroll down to the saved vault card
+    document.getElementById('section-vault')?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Delete Item
+  function deleteVaultItem(id) {
+    const item = savedVaultItems.find(i => i.id === id);
+    savedVaultItems = savedVaultItems.filter(i => i.id !== id);
+    saveVaultToStorage();
+    renderVaultList();
+    showToast(`Removed ${item ? item.label : 'credential'} from vault`);
+  }
+
+  // Clear Entire Vault
+  function clearVault() {
+    if (!savedVaultItems.length) return;
+    savedVaultItems = [];
+    saveVaultToStorage();
+    renderVaultList();
+    showToast('Saved vault cleared');
+  }
+
+  // Export Vault Backup
+  function exportVault() {
+    if (!savedVaultItems.length) {
+      showToast('Vault is empty, nothing to export');
+      return;
+    }
+    const dataStr = JSON.stringify(savedVaultItems, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `ares-vault-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Vault backup downloaded');
+  }
+
+  // Render 8 numbered quick-switch capsules
+  function renderArchetypePips() {
+    if (!archetypePipsTrack) return;
+    const pipBtns = archetypePipsTrack.querySelectorAll('.archetype-pip-btn');
+    if (pipBtns.length === generatedArchetypes.length) {
+      pipBtns.forEach((btn, index) => {
+        const item = generatedArchetypes[index];
+        const isActive = index === activeArchetypeIndex;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        if (item) btn.setAttribute('title', `Switch to format ${index + 1}: ${item.name}`);
+      });
+    } else {
+      archetypePipsTrack.innerHTML = '';
+      generatedArchetypes.forEach((item, index) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `archetype-pip-btn ${index === activeArchetypeIndex ? 'active' : ''}`;
+        btn.setAttribute('role', 'tab');
+        btn.setAttribute('aria-selected', index === activeArchetypeIndex ? 'true' : 'false');
+        btn.setAttribute('title', `Switch to format ${index + 1}: ${item.name}`);
+        btn.textContent = `${index + 1}`;
+        btn.addEventListener('click', () => {
+          activeArchetypeIndex = index;
+          renderActiveArchetype();
+          showToast(`Viewing ${item.name} (${index + 1}/8)`);
+        });
+        archetypePipsTrack.appendChild(btn);
+      });
+    }
   }
 
   // Calculate Shannon Entropy & Crack Resistance
@@ -673,10 +1011,6 @@
     if (strengthCrackTime) strengthCrackTime.textContent = crackTime;
     if (strengthEntropy) strengthEntropy.textContent = `${entropyBits} bits`;
 
-    if (overviewEntropyRating) overviewEntropyRating.textContent = rating;
-    if (overviewEntropyDesc) overviewEntropyDesc.textContent = `${entropyBits} bits Shannon`;
-    if (overviewCrackTime) overviewCrackTime.textContent = crackTime;
-
     // Segmented bar
     strengthSegments.forEach((seg, i) => {
       if (!seg) return;
@@ -691,6 +1025,12 @@
   // Visibility Toggle
   function toggleVisibility() {
     isPasswordMasked = !isPasswordMasked;
+    applyMaskState();
+    showToast(isPasswordMasked ? 'Credential masked' : 'Credential revealed');
+  }
+
+  // Apply Masking State
+  function applyMaskState() {
     if (primaryDisplay) {
       primaryDisplay.classList.toggle('masked', isPasswordMasked);
     }
@@ -698,10 +1038,9 @@
       iconEyeOpen.style.display = isPasswordMasked ? 'none' : 'block';
       iconEyeClosed.style.display = isPasswordMasked ? 'block' : 'none';
     }
-    showToast(isPasswordMasked ? 'Password masked' : 'Password revealed');
   }
 
-  // Copy Primary Credential
+  // Copy Active Primary Credential
   function copyPrimary() {
     if (!currentPrimaryPassword) return;
     copyToClipboard(currentPrimaryPassword, () => {
@@ -713,7 +1052,8 @@
           if (copyPrimaryLabel) copyPrimaryLabel.textContent = 'Copy';
         }, 1800);
       }
-      showToast('Primary credential copied to clipboard');
+      const activeName = generatedArchetypes[activeArchetypeIndex]?.name || 'Credential';
+      showToast(`${activeName} copied to clipboard`);
     });
   }
 

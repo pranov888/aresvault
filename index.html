@@ -16,47 +16,241 @@
 </head>
 <body>
 
-  <!-- Dynamic Atmospheric Backdrop: Light Mode Sky vs Dark Mode Image 2 Color Mesh -->
+      <!-- Atmospheric Celestial Canvas: Seamless Day Sky vs Starry Midnight Sky -->
   <div class="ambient-backdrop" aria-hidden="true">
-    <!-- Dark Mode: Ambient Mesh Aura with Image 2 Palette (Pitch Dark + Glowing Acid Lime / Emerald) -->
-    <div class="dark-mesh-backdrop">
-      <div class="mesh-orb mesh-lime"></div>
-      <div class="mesh-orb mesh-cyan"></div>
-      <div class="mesh-orb mesh-deep"></div>
-      <div class="dark-grid-overlay"></div>
+
+    <!-- Day Sky Layer (Active in Light Mode: Seamless Luminous Stratosphere) -->
+    <div class="sky-scene day-sky-scene">
+      <div class="day-sky-canvas"></div>
     </div>
 
-    <!-- Light Mode: Vivid Blue Sky with Striped Sun & Flowing Cream Waves (Image 1 Inspiration) -->
-    <div class="light-sky-backdrop">
-      <div class="sky-gradient-base"></div>
-      <div class="sky-sun-beam"></div>
-
-      <!-- Stylized Striped Sun (Top-Right, matching Image 1) -->
-      <svg class="sky-sun-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="sunStripes" width="16" height="16" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
-            <line x1="0" y1="0" x2="0" y2="16" stroke="#fcd34d" stroke-width="7" />
-            <line x1="8" y1="0" x2="8" y2="16" stroke="#f59e0b" stroke-width="7" />
-          </pattern>
-          <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#fde047" stop-opacity="0.95" />
-            <stop offset="70%" stop-color="#f59e0b" stop-opacity="0.98" />
-            <stop offset="100%" stop-color="#d97706" stop-opacity="1" />
-          </radialGradient>
-        </defs>
-        <circle cx="80" cy="80" r="66" fill="url(#sunGlow)" />
-        <circle cx="80" cy="80" r="66" fill="url(#sunStripes)" opacity="0.88" />
-      </svg>
-
-      <!-- Stylized Flowing Cream Cloud Waves (Bottom & Sides, matching Image 1) -->
-      <svg class="sky-clouds-svg" viewBox="0 0 1440 440" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M-40 440 L-40 260 C80 240 180 300 300 270 C420 240 480 160 620 160 C740 160 820 220 940 220 C1080 220 1140 100 1260 90 C1360 80 1420 130 1480 160 L1480 440 Z" fill="#fdfbf7" opacity="0.94"/>
-        <path d="M-40 440 L-40 320 C140 310 240 360 400 340 C560 320 640 250 780 260 C920 270 1040 340 1180 320 C1300 300 1380 330 1480 340 L1480 440 Z" fill="#f4efe6" opacity="0.98"/>
-        <!-- Soft floating cloud puffs -->
-        <ellipse cx="180" cy="220" rx="90" ry="32" fill="#ffffff" opacity="0.85" />
-        <ellipse cx="1120" cy="80" rx="110" ry="38" fill="#ffffff" opacity="0.9" />
+    <!-- Night Sky Layer (Active in Dark Mode: Deep Midnight Blue with Stationary Dot-Like Stars) -->
+    <div class="sky-scene night-sky-scene">
+      <div class="night-sky-canvas"></div>
+      <svg class="night-starfield-svg" viewBox="0 0 1920 1080" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="1774" cy="1048" r="1.6" fill="#ffffff" opacity="0.71" class="star-dot twinkle-a"/>
+<circle cx="1416" cy="1005" r="0.6" fill="#ffffff" opacity="0.76" class="star-dot"/>
+<circle cx="30" cy="713" r="0.9" fill="#dbeafe" opacity="0.44" class="star-dot"/>
+<circle cx="936" cy="876" r="1.1" fill="#ffffff" opacity="0.78" class="star-dot"/>
+<circle cx="442" cy="597" r="0.6" fill="#fef08a" opacity="0.85" class="star-dot"/>
+<circle cx="941" cy="806" r="2.0" fill="#ffffff" opacity="0.62" class="star-dot twinkle-a"/>
+<circle cx="1090" cy="818" r="0.9" fill="#e0f2fe" opacity="0.8" class="star-dot"/>
+<circle cx="503" cy="1039" r="0.75" fill="#ffffff" opacity="0.4" class="star-dot"/>
+<circle cx="1766" cy="635" r="1.1" fill="#bae6fd" opacity="0.43" class="star-dot"/>
+<circle cx="117" cy="803" r="2.0" fill="#bae6fd" opacity="0.39" class="star-dot twinkle-a"/>
+<circle cx="462" cy="75" r="2.0" fill="#e0f2fe" opacity="0.58" class="star-dot twinkle-b"/>
+<circle cx="1134" cy="741" r="1.1" fill="#ffffff" opacity="0.41" class="star-dot"/>
+<circle cx="1758" cy="758" r="0.9" fill="#e0f2fe" opacity="0.61" class="star-dot"/>
+<circle cx="171" cy="893" r="2.0" fill="#ffffff" opacity="0.49" class="star-dot twinkle-a"/>
+<circle cx="1098" cy="288" r="1.6" fill="#fef08a" opacity="0.76" class="star-dot twinkle-d"/>
+<circle cx="39" cy="800" r="1.6" fill="#e0f2fe" opacity="0.46" class="star-dot twinkle-b"/>
+<circle cx="1359" cy="507" r="0.75" fill="#fef08a" opacity="0.63" class="star-dot"/>
+<circle cx="1831" cy="289" r="0.9" fill="#ffffff" opacity="0.84" class="star-dot"/>
+<circle cx="1644" cy="420" r="1.1" fill="#e0f2fe" opacity="0.94" class="star-dot"/>
+<circle cx="591" cy="598" r="0.9" fill="#e0f2fe" opacity="0.88" class="star-dot"/>
+<circle cx="1766" cy="287" r="0.75" fill="#fef08a" opacity="0.47" class="star-dot"/>
+<circle cx="772" cy="769" r="1.6" fill="#ffffff" opacity="0.37" class="star-dot twinkle-b"/>
+<circle cx="1125" cy="496" r="0.6" fill="#dbeafe" opacity="0.52" class="star-dot"/>
+<circle cx="935" cy="381" r="1.1" fill="#ffffff" opacity="0.54" class="star-dot"/>
+<circle cx="1259" cy="585" r="1.1" fill="#fef08a" opacity="0.77" class="star-dot"/>
+<circle cx="1845" cy="251" r="1.1" fill="#e0f2fe" opacity="0.65" class="star-dot"/>
+<circle cx="1722" cy="570" r="2.0" fill="#e0f2fe" opacity="0.8" class="star-dot twinkle-a"/>
+<circle cx="1628" cy="409" r="0.9" fill="#dbeafe" opacity="0.58" class="star-dot"/>
+<circle cx="499" cy="125" r="0.6" fill="#e0f2fe" opacity="0.87" class="star-dot"/>
+<circle cx="252" cy="398" r="0.75" fill="#e0f2fe" opacity="0.53" class="star-dot"/>
+<circle cx="1829" cy="876" r="0.9" fill="#dbeafe" opacity="0.82" class="star-dot"/>
+<circle cx="1769" cy="806" r="0.9" fill="#bae6fd" opacity="0.48" class="star-dot"/>
+<circle cx="1491" cy="679" r="0.75" fill="#dbeafe" opacity="0.64" class="star-dot"/>
+<circle cx="119" cy="103" r="0.75" fill="#ffffff" opacity="0.37" class="star-dot"/>
+<circle cx="1736" cy="721" r="1.3" fill="#ffffff" opacity="0.64" class="star-dot twinkle-c"/>
+<circle cx="882" cy="105" r="1.3" fill="#dbeafe" opacity="0.57" class="star-dot twinkle-b"/>
+<circle cx="1521" cy="584" r="1.1" fill="#dbeafe" opacity="0.85" class="star-dot"/>
+<circle cx="784" cy="239" r="1.1" fill="#bae6fd" opacity="0.63" class="star-dot"/>
+<circle cx="42" cy="1063" r="0.9" fill="#dbeafe" opacity="0.71" class="star-dot"/>
+<circle cx="86" cy="618" r="1.3" fill="#ffffff" opacity="0.59" class="star-dot twinkle-c"/>
+<circle cx="435" cy="35" r="0.6" fill="#ffffff" opacity="0.78" class="star-dot"/>
+<circle cx="122" cy="372" r="0.6" fill="#e0f2fe" opacity="0.9" class="star-dot"/>
+<circle cx="951" cy="313" r="0.6" fill="#bae6fd" opacity="0.73" class="star-dot"/>
+<circle cx="1618" cy="925" r="0.6" fill="#ffffff" opacity="0.68" class="star-dot"/>
+<circle cx="626" cy="220" r="1.6" fill="#ffffff" opacity="0.36" class="star-dot twinkle-d"/>
+<circle cx="382" cy="587" r="0.9" fill="#e0f2fe" opacity="0.9" class="star-dot"/>
+<circle cx="703" cy="1050" r="1.3" fill="#fef08a" opacity="0.57" class="star-dot twinkle-c"/>
+<circle cx="1399" cy="479" r="1.3" fill="#e0f2fe" opacity="0.54" class="star-dot twinkle-a"/>
+<circle cx="468" cy="1032" r="0.6" fill="#ffffff" opacity="0.49" class="star-dot"/>
+<circle cx="157" cy="356" r="2.0" fill="#fef08a" opacity="0.9" class="star-dot twinkle-c"/>
+<circle cx="748" cy="48" r="0.75" fill="#dbeafe" opacity="0.4" class="star-dot"/>
+<circle cx="239" cy="1028" r="2.0" fill="#bae6fd" opacity="0.51" class="star-dot twinkle-b"/>
+<circle cx="1886" cy="854" r="2.0" fill="#ffffff" opacity="0.69" class="star-dot twinkle-b"/>
+<circle cx="1109" cy="857" r="0.9" fill="#bae6fd" opacity="0.49" class="star-dot"/>
+<circle cx="1414" cy="764" r="1.3" fill="#fef08a" opacity="0.35" class="star-dot twinkle-d"/>
+<circle cx="21" cy="517" r="1.6" fill="#ffffff" opacity="0.41" class="star-dot twinkle-d"/>
+<circle cx="647" cy="512" r="0.6" fill="#e0f2fe" opacity="0.65" class="star-dot"/>
+<circle cx="865" cy="571" r="1.1" fill="#e0f2fe" opacity="0.92" class="star-dot"/>
+<circle cx="1421" cy="419" r="0.6" fill="#ffffff" opacity="0.74" class="star-dot"/>
+<circle cx="202" cy="307" r="0.9" fill="#e0f2fe" opacity="0.9" class="star-dot"/>
+<circle cx="1827" cy="399" r="0.9" fill="#ffffff" opacity="0.68" class="star-dot"/>
+<circle cx="695" cy="421" r="1.6" fill="#bae6fd" opacity="0.75" class="star-dot twinkle-c"/>
+<circle cx="712" cy="1012" r="1.3" fill="#ffffff" opacity="0.75" class="star-dot twinkle-a"/>
+<circle cx="1186" cy="683" r="0.9" fill="#ffffff" opacity="0.67" class="star-dot"/>
+<circle cx="1769" cy="899" r="1.3" fill="#e0f2fe" opacity="0.77" class="star-dot twinkle-d"/>
+<circle cx="941" cy="597" r="1.1" fill="#dbeafe" opacity="0.4" class="star-dot"/>
+<circle cx="1297" cy="419" r="0.6" fill="#dbeafe" opacity="0.36" class="star-dot"/>
+<circle cx="441" cy="49" r="2.0" fill="#ffffff" opacity="0.82" class="star-dot twinkle-a"/>
+<circle cx="106" cy="789" r="2.0" fill="#ffffff" opacity="0.59" class="star-dot twinkle-d"/>
+<circle cx="50" cy="859" r="0.9" fill="#bae6fd" opacity="0.74" class="star-dot"/>
+<circle cx="256" cy="643" r="0.75" fill="#ffffff" opacity="0.95" class="star-dot"/>
+<circle cx="207" cy="19" r="1.3" fill="#fef08a" opacity="0.42" class="star-dot twinkle-b"/>
+<circle cx="1484" cy="793" r="2.0" fill="#e0f2fe" opacity="0.65" class="star-dot twinkle-b"/>
+<circle cx="1377" cy="888" r="1.3" fill="#bae6fd" opacity="0.67" class="star-dot twinkle-d"/>
+<circle cx="1406" cy="992" r="0.9" fill="#dbeafe" opacity="0.44" class="star-dot"/>
+<circle cx="708" cy="108" r="1.3" fill="#ffffff" opacity="0.53" class="star-dot twinkle-d"/>
+<circle cx="100" cy="120" r="2.0" fill="#fef08a" opacity="0.37" class="star-dot twinkle-a"/>
+<circle cx="65" cy="290" r="2.0" fill="#ffffff" opacity="0.78" class="star-dot twinkle-a"/>
+<circle cx="1213" cy="908" r="0.75" fill="#fef08a" opacity="0.48" class="star-dot"/>
+<circle cx="1179" cy="88" r="0.75" fill="#ffffff" opacity="0.65" class="star-dot"/>
+<circle cx="148" cy="655" r="2.0" fill="#ffffff" opacity="0.6" class="star-dot twinkle-c"/>
+<circle cx="399" cy="224" r="1.3" fill="#e0f2fe" opacity="0.79" class="star-dot twinkle-a"/>
+<circle cx="993" cy="713" r="0.75" fill="#ffffff" opacity="0.41" class="star-dot"/>
+<circle cx="1345" cy="505" r="2.0" fill="#dbeafe" opacity="0.77" class="star-dot twinkle-a"/>
+<circle cx="1765" cy="804" r="0.6" fill="#fef08a" opacity="0.68" class="star-dot"/>
+<circle cx="1010" cy="455" r="0.75" fill="#bae6fd" opacity="0.43" class="star-dot"/>
+<circle cx="515" cy="1042" r="2.0" fill="#bae6fd" opacity="0.46" class="star-dot twinkle-d"/>
+<circle cx="745" cy="764" r="1.6" fill="#dbeafe" opacity="0.91" class="star-dot twinkle-d"/>
+<circle cx="636" cy="792" r="2.0" fill="#ffffff" opacity="0.77" class="star-dot twinkle-d"/>
+<circle cx="644" cy="815" r="0.6" fill="#ffffff" opacity="0.64" class="star-dot"/>
+<circle cx="1734" cy="148" r="0.75" fill="#bae6fd" opacity="0.85" class="star-dot"/>
+<circle cx="1420" cy="102" r="1.3" fill="#ffffff" opacity="0.52" class="star-dot twinkle-d"/>
+<circle cx="1596" cy="589" r="2.0" fill="#ffffff" opacity="0.92" class="star-dot twinkle-b"/>
+<circle cx="373" cy="409" r="1.6" fill="#fef08a" opacity="0.49" class="star-dot twinkle-a"/>
+<circle cx="446" cy="737" r="0.75" fill="#dbeafe" opacity="0.45" class="star-dot"/>
+<circle cx="563" cy="516" r="0.9" fill="#e0f2fe" opacity="0.94" class="star-dot"/>
+<circle cx="1542" cy="595" r="0.9" fill="#ffffff" opacity="0.37" class="star-dot"/>
+<circle cx="693" cy="904" r="0.6" fill="#bae6fd" opacity="0.67" class="star-dot"/>
+<circle cx="1442" cy="1020" r="1.3" fill="#dbeafe" opacity="0.66" class="star-dot twinkle-a"/>
+<circle cx="871" cy="1008" r="0.9" fill="#fef08a" opacity="0.69" class="star-dot"/>
+<circle cx="1543" cy="891" r="0.6" fill="#dbeafe" opacity="0.84" class="star-dot"/>
+<circle cx="326" cy="658" r="0.9" fill="#ffffff" opacity="0.65" class="star-dot"/>
+<circle cx="1157" cy="454" r="1.6" fill="#e0f2fe" opacity="0.38" class="star-dot twinkle-d"/>
+<circle cx="115" cy="305" r="1.3" fill="#ffffff" opacity="0.83" class="star-dot twinkle-b"/>
+<circle cx="1575" cy="212" r="0.9" fill="#ffffff" opacity="0.36" class="star-dot"/>
+<circle cx="80" cy="169" r="1.6" fill="#bae6fd" opacity="0.87" class="star-dot twinkle-a"/>
+<circle cx="1577" cy="163" r="0.6" fill="#ffffff" opacity="0.45" class="star-dot"/>
+<circle cx="249" cy="933" r="1.3" fill="#ffffff" opacity="0.48" class="star-dot twinkle-d"/>
+<circle cx="426" cy="74" r="0.6" fill="#e0f2fe" opacity="0.9" class="star-dot"/>
+<circle cx="1477" cy="480" r="0.75" fill="#ffffff" opacity="0.71" class="star-dot"/>
+<circle cx="1514" cy="124" r="0.6" fill="#e0f2fe" opacity="0.66" class="star-dot"/>
+<circle cx="285" cy="957" r="1.6" fill="#ffffff" opacity="0.78" class="star-dot twinkle-a"/>
+<circle cx="1179" cy="175" r="0.9" fill="#ffffff" opacity="0.38" class="star-dot"/>
+<circle cx="1801" cy="502" r="0.75" fill="#bae6fd" opacity="0.81" class="star-dot"/>
+<circle cx="1163" cy="420" r="1.3" fill="#fef08a" opacity="0.35" class="star-dot twinkle-a"/>
+<circle cx="598" cy="203" r="0.75" fill="#fef08a" opacity="0.83" class="star-dot"/>
+<circle cx="336" cy="168" r="1.1" fill="#ffffff" opacity="0.73" class="star-dot"/>
+<circle cx="1714" cy="419" r="1.6" fill="#ffffff" opacity="0.49" class="star-dot twinkle-d"/>
+<circle cx="1536" cy="1042" r="2.0" fill="#dbeafe" opacity="0.82" class="star-dot twinkle-d"/>
+<circle cx="392" cy="247" r="1.1" fill="#ffffff" opacity="0.79" class="star-dot"/>
+<circle cx="1391" cy="245" r="1.3" fill="#e0f2fe" opacity="0.62" class="star-dot twinkle-a"/>
+<circle cx="241" cy="203" r="0.75" fill="#ffffff" opacity="0.88" class="star-dot"/>
+<circle cx="1268" cy="319" r="1.3" fill="#dbeafe" opacity="0.56" class="star-dot twinkle-a"/>
+<circle cx="1116" cy="771" r="0.9" fill="#bae6fd" opacity="0.44" class="star-dot"/>
+<circle cx="719" cy="382" r="1.1" fill="#bae6fd" opacity="0.7" class="star-dot"/>
+<circle cx="460" cy="715" r="0.9" fill="#ffffff" opacity="0.45" class="star-dot"/>
+<circle cx="1298" cy="1009" r="0.9" fill="#dbeafe" opacity="0.61" class="star-dot"/>
+<circle cx="1887" cy="523" r="1.1" fill="#bae6fd" opacity="0.89" class="star-dot"/>
+<circle cx="140" cy="282" r="0.9" fill="#ffffff" opacity="0.82" class="star-dot"/>
+<circle cx="1570" cy="268" r="2.0" fill="#bae6fd" opacity="0.42" class="star-dot twinkle-d"/>
+<circle cx="1893" cy="468" r="1.1" fill="#e0f2fe" opacity="0.92" class="star-dot"/>
+<circle cx="941" cy="362" r="1.3" fill="#dbeafe" opacity="0.42" class="star-dot twinkle-d"/>
+<circle cx="555" cy="486" r="1.6" fill="#fef08a" opacity="0.77" class="star-dot twinkle-d"/>
+<circle cx="151" cy="313" r="2.0" fill="#bae6fd" opacity="0.48" class="star-dot twinkle-d"/>
+<circle cx="1718" cy="440" r="0.9" fill="#ffffff" opacity="0.46" class="star-dot"/>
+<circle cx="1214" cy="502" r="1.1" fill="#ffffff" opacity="0.66" class="star-dot"/>
+<circle cx="540" cy="1040" r="0.9" fill="#ffffff" opacity="0.8" class="star-dot"/>
+<circle cx="1873" cy="921" r="0.6" fill="#dbeafe" opacity="0.84" class="star-dot"/>
+<circle cx="1290" cy="740" r="0.9" fill="#ffffff" opacity="0.8" class="star-dot"/>
+<circle cx="948" cy="81" r="2.0" fill="#bae6fd" opacity="0.89" class="star-dot twinkle-a"/>
+<circle cx="1519" cy="514" r="2.0" fill="#ffffff" opacity="0.55" class="star-dot twinkle-c"/>
+<circle cx="1473" cy="619" r="0.9" fill="#ffffff" opacity="0.88" class="star-dot"/>
+<circle cx="1398" cy="965" r="0.9" fill="#ffffff" opacity="0.81" class="star-dot"/>
+<circle cx="379" cy="1050" r="1.1" fill="#e0f2fe" opacity="0.54" class="star-dot"/>
+<circle cx="413" cy="172" r="0.9" fill="#ffffff" opacity="0.58" class="star-dot"/>
+<circle cx="149" cy="1023" r="0.75" fill="#ffffff" opacity="0.51" class="star-dot"/>
+<circle cx="1616" cy="341" r="0.75" fill="#fef08a" opacity="0.57" class="star-dot"/>
+<circle cx="459" cy="337" r="0.75" fill="#ffffff" opacity="0.74" class="star-dot"/>
+<circle cx="1635" cy="268" r="0.9" fill="#dbeafe" opacity="0.83" class="star-dot"/>
+<circle cx="1388" cy="306" r="1.3" fill="#ffffff" opacity="0.54" class="star-dot twinkle-c"/>
+<circle cx="925" cy="872" r="0.75" fill="#ffffff" opacity="0.65" class="star-dot"/>
+<circle cx="1633" cy="363" r="0.6" fill="#e0f2fe" opacity="0.37" class="star-dot"/>
+<circle cx="1012" cy="865" r="2.0" fill="#dbeafe" opacity="0.79" class="star-dot twinkle-b"/>
+<circle cx="98" cy="570" r="1.1" fill="#e0f2fe" opacity="0.94" class="star-dot"/>
+<circle cx="1150" cy="448" r="1.1" fill="#e0f2fe" opacity="0.38" class="star-dot"/>
+<circle cx="1610" cy="910" r="1.3" fill="#bae6fd" opacity="0.76" class="star-dot twinkle-c"/>
+<circle cx="292" cy="70" r="1.3" fill="#ffffff" opacity="0.61" class="star-dot twinkle-a"/>
+<circle cx="1764" cy="584" r="1.3" fill="#bae6fd" opacity="0.38" class="star-dot twinkle-d"/>
+<circle cx="1370" cy="28" r="0.6" fill="#ffffff" opacity="0.92" class="star-dot"/>
+<circle cx="330" cy="494" r="0.6" fill="#fef08a" opacity="0.74" class="star-dot"/>
+<circle cx="137" cy="759" r="2.0" fill="#ffffff" opacity="0.84" class="star-dot twinkle-b"/>
+<circle cx="444" cy="884" r="0.75" fill="#dbeafe" opacity="0.84" class="star-dot"/>
+<circle cx="541" cy="780" r="0.75" fill="#ffffff" opacity="0.53" class="star-dot"/>
+<circle cx="1718" cy="530" r="1.6" fill="#ffffff" opacity="0.56" class="star-dot twinkle-b"/>
+<circle cx="815" cy="918" r="1.3" fill="#fef08a" opacity="0.57" class="star-dot twinkle-b"/>
+<circle cx="1059" cy="615" r="0.9" fill="#ffffff" opacity="0.86" class="star-dot"/>
+<circle cx="1099" cy="1013" r="2.0" fill="#bae6fd" opacity="0.89" class="star-dot twinkle-d"/>
+<circle cx="1820" cy="788" r="0.9" fill="#e0f2fe" opacity="0.66" class="star-dot"/>
+<circle cx="670" cy="495" r="2.0" fill="#dbeafe" opacity="0.54" class="star-dot twinkle-a"/>
+<circle cx="401" cy="108" r="2.0" fill="#ffffff" opacity="0.59" class="star-dot twinkle-b"/>
+<circle cx="560" cy="1026" r="1.6" fill="#bae6fd" opacity="0.9" class="star-dot twinkle-b"/>
+<circle cx="463" cy="960" r="1.1" fill="#fef08a" opacity="0.52" class="star-dot"/>
+<circle cx="1072" cy="531" r="2.0" fill="#dbeafe" opacity="0.69" class="star-dot twinkle-a"/>
+<circle cx="902" cy="75" r="1.6" fill="#ffffff" opacity="0.59" class="star-dot twinkle-b"/>
+<circle cx="1065" cy="709" r="1.1" fill="#e0f2fe" opacity="0.87" class="star-dot"/>
+<circle cx="948" cy="566" r="1.6" fill="#ffffff" opacity="0.91" class="star-dot twinkle-d"/>
+<circle cx="522" cy="227" r="1.1" fill="#ffffff" opacity="0.92" class="star-dot"/>
+<circle cx="352" cy="901" r="0.9" fill="#ffffff" opacity="0.68" class="star-dot"/>
+<circle cx="772" cy="485" r="1.3" fill="#fef08a" opacity="0.46" class="star-dot twinkle-a"/>
+<circle cx="733" cy="956" r="0.9" fill="#e0f2fe" opacity="0.45" class="star-dot"/>
+<circle cx="1256" cy="658" r="1.3" fill="#e0f2fe" opacity="0.86" class="star-dot twinkle-a"/>
+<circle cx="1624" cy="892" r="1.6" fill="#fef08a" opacity="0.51" class="star-dot twinkle-a"/>
+<circle cx="658" cy="918" r="0.75" fill="#ffffff" opacity="0.5" class="star-dot"/>
+<circle cx="1483" cy="669" r="0.9" fill="#fef08a" opacity="0.67" class="star-dot"/>
+<circle cx="1465" cy="257" r="0.6" fill="#fef08a" opacity="0.66" class="star-dot"/>
+<circle cx="496" cy="306" r="0.6" fill="#dbeafe" opacity="0.74" class="star-dot"/>
+<circle cx="1155" cy="598" r="0.6" fill="#dbeafe" opacity="0.87" class="star-dot"/>
+<circle cx="1903" cy="730" r="0.75" fill="#ffffff" opacity="0.88" class="star-dot"/>
+<circle cx="839" cy="97" r="0.9" fill="#ffffff" opacity="0.86" class="star-dot"/>
+<circle cx="1884" cy="506" r="1.1" fill="#dbeafe" opacity="0.79" class="star-dot"/>
+<circle cx="551" cy="742" r="1.3" fill="#fef08a" opacity="0.53" class="star-dot twinkle-c"/>
+<circle cx="427" cy="648" r="0.6" fill="#ffffff" opacity="0.59" class="star-dot"/>
+<circle cx="1814" cy="762" r="1.6" fill="#fef08a" opacity="0.7" class="star-dot twinkle-b"/>
+<circle cx="770" cy="621" r="2.0" fill="#ffffff" opacity="0.4" class="star-dot twinkle-b"/>
+<circle cx="832" cy="840" r="2.0" fill="#dbeafe" opacity="0.53" class="star-dot twinkle-a"/>
+<circle cx="149" cy="447" r="0.6" fill="#ffffff" opacity="0.88" class="star-dot"/>
+<circle cx="1575" cy="73" r="0.6" fill="#e0f2fe" opacity="0.91" class="star-dot"/>
+<circle cx="959" cy="183" r="0.75" fill="#e0f2fe" opacity="0.8" class="star-dot"/>
+<circle cx="588" cy="31" r="0.75" fill="#ffffff" opacity="0.48" class="star-dot"/>
+<circle cx="1400" cy="334" r="0.9" fill="#e0f2fe" opacity="0.46" class="star-dot"/>
+<circle cx="468" cy="341" r="1.1" fill="#e0f2fe" opacity="0.6" class="star-dot"/>
+<circle cx="1220" cy="262" r="0.9" fill="#bae6fd" opacity="0.7" class="star-dot"/>
+<circle cx="1776" cy="985" r="1.1" fill="#bae6fd" opacity="0.38" class="star-dot"/>
+<circle cx="1506" cy="626" r="2.0" fill="#ffffff" opacity="0.72" class="star-dot twinkle-b"/>
+<circle cx="1004" cy="94" r="0.6" fill="#dbeafe" opacity="0.56" class="star-dot"/>
+<circle cx="741" cy="101" r="1.6" fill="#e0f2fe" opacity="0.88" class="star-dot twinkle-a"/>
+<circle cx="1768" cy="920" r="0.75" fill="#bae6fd" opacity="0.58" class="star-dot"/>
+<circle cx="1199" cy="1058" r="2.0" fill="#bae6fd" opacity="0.65" class="star-dot twinkle-b"/>
+<circle cx="1434" cy="688" r="2.0" fill="#ffffff" opacity="0.51" class="star-dot twinkle-b"/>
+<circle cx="590" cy="935" r="2.0" fill="#bae6fd" opacity="0.76" class="star-dot twinkle-b"/>
+<circle cx="1144" cy="979" r="0.6" fill="#fef08a" opacity="0.49" class="star-dot"/>
+<circle cx="130" cy="293" r="2.0" fill="#e0f2fe" opacity="0.62" class="star-dot twinkle-b"/>
+<circle cx="1188" cy="141" r="2.0" fill="#ffffff" opacity="0.9" class="star-dot twinkle-d"/>
+<circle cx="1649" cy="751" r="0.9" fill="#fef08a" opacity="0.35" class="star-dot"/>
+<circle cx="1208" cy="416" r="1.6" fill="#fef08a" opacity="0.39" class="star-dot twinkle-c"/>
+<circle cx="900" cy="885" r="1.6" fill="#ffffff" opacity="0.77" class="star-dot twinkle-b"/>
+<circle cx="1043" cy="230" r="1.6" fill="#ffffff" opacity="0.71" class="star-dot twinkle-a"/>
+<circle cx="1388" cy="467" r="0.6" fill="#dbeafe" opacity="0.38" class="star-dot"/>
+<circle cx="622" cy="910" r="0.6" fill="#e0f2fe" opacity="0.48" class="star-dot"/>
+<circle cx="1844" cy="324" r="1.6" fill="#e0f2fe" opacity="0.76" class="star-dot twinkle-a"/>
       </svg>
     </div>
+
   </div>
 
   <!-- Master Viewport -->
@@ -85,7 +279,7 @@
         </svg>
       </button>
 
-      <button type="button" class="dock-btn" id="dock-btn-archetypes" title="Synthesized Archetypes">
+      <button type="button" class="dock-btn" id="dock-btn-archetypes" title="Saved Passwords Vault">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="3" width="7" height="7"></rect>
           <rect x="14" y="3" width="7" height="7"></rect>
@@ -128,10 +322,6 @@
         <header class="console-header">
           <div class="console-brand-wrap">
             <h1 class="console-title">Ares Vault</h1>
-            <span class="sandbox-pill">
-              <span class="pulse-dot"></span>
-              Client-Side Sandbox
-            </span>
           </div>
 
           <div class="header-right-actions">
@@ -170,14 +360,40 @@
           <!-- Left Column: Primary Credential + Synthesized Archetypes List -->
           <section class="console-column column-left">
 
-            <!-- Primary Credential Card (Hero Studio) -->
+            <!-- Deterministic Credential Studio (Card 1) -->
             <article class="glass-subcard primary-credential-card" id="section-hero">
               <div class="card-header-row">
                 <div class="card-label-badge">
                   <span class="badge-tag">PRIMARY VAULT CREDENTIAL</span>
-                  <span class="badge-sub" id="active-credential-badge">Fortress Tactical</span>
+                  <div class="format-badge-row">
+                    <span class="badge-sub" id="active-credential-badge">Fortress Tactical</span>
+                    <span class="status-pill-badge pill-ongoing" id="archetype-category-badge">Fortress</span>
+                  </div>
                 </div>
+
                 <div class="credential-actions">
+                  <!-- Stepper: 1 / 8 with Prev / Next -->
+                  <div class="format-stepper-control">
+                    <div class="archetype-counter-badge" id="archetype-counter-badge" title="Active Format Index">
+                      <span id="archetype-counter-current">1</span>
+                      <span class="counter-sep">/</span>
+                      <span id="archetype-counter-total">8</span>
+                    </div>
+                    <div class="archetype-nav-arrows">
+                      <button type="button" class="stepper-arrow-btn" id="btn-archetype-prev" title="Previous Format (Arrow Left)" aria-label="Previous Format">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                      </button>
+                      <button type="button" class="stepper-arrow-btn" id="btn-archetype-next" title="Next Format (Arrow Right)" aria-label="Next Format">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Visibility Toggle Button -->
                   <button type="button" class="card-action-btn" id="btn-toggle-visibility" title="Mask / Unmask">
                     <svg id="icon-eye-open" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -188,6 +404,17 @@
                       <line x1="1" y1="1" x2="23" y2="23"></line>
                     </svg>
                   </button>
+
+                  <!-- Save to Vault Button -->
+                  <button type="button" class="card-action-btn" id="btn-save-hero-vault" title="Save this credential to vault">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                      <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                      <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                  </button>
+
+                  <!-- Copy Primary Button -->
                   <button type="button" class="copy-primary-btn" id="btn-copy-primary">
                     <svg class="copy-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -202,6 +429,9 @@
               <div class="password-monolith-box">
                 <span id="primary-password-text" class="password-text-string">Cr1m$0n#4r3$!00$717@n*koa</span>
               </div>
+
+              <!-- Format Description -->
+              <div class="active-format-desc" id="archetype-desc">Multi-set leet token with cryptographic seed salt</div>
 
               <!-- Segmented Strength Track -->
               <div class="strength-track-wrap">
@@ -228,112 +458,93 @@
                   <span class="meta-value" id="strength-entropy">164 bits</span>
                 </div>
               </div>
-            </article>
 
-            <!-- Synthesized Password Archetypes (Matching the "Challenges" section from Reference) -->
-            <article class="glass-subcard archetypes-section" id="section-archetypes">
-              <div class="section-title-row">
-                <div class="title-left">
-                  <h2 class="subcard-title">Synthesized Archetypes</h2>
-                  <span class="subcard-subtitle">8 Deterministic Formats for Every Platform</span>
+              <!-- Quick-Jump Capsule Bar: [1] [2] [3] [4] [5] [6] [7] [8] + Copy All -->
+              <div class="format-capsule-bar">
+                <div class="capsule-bar-left">
+                  <span class="capsule-bar-label">FORMATS</span>
+                  <div class="archetype-pips-track" id="archetype-pips-track" role="tablist" aria-label="Format Quick Jump">
+                    <button type="button" class="archetype-pip-btn active" data-pip-index="0" role="tab" aria-selected="true" title="1. Fortress Tactical">1</button>
+                    <button type="button" class="archetype-pip-btn" data-pip-index="1" role="tab" aria-selected="false" title="2. Memorable Passphrase">2</button>
+                    <button type="button" class="archetype-pip-btn" data-pip-index="2" role="tab" aria-selected="false" title="3. Developer CLI Token">3</button>
+                    <button type="button" class="archetype-pip-btn" data-pip-index="3" role="tab" aria-selected="false" title="4. Alphanumeric PIN">4</button>
+                    <button type="button" class="archetype-pip-btn" data-pip-index="4" role="tab" aria-selected="false" title="5. Ultra High-Entropy">5</button>
+                    <button type="button" class="archetype-pip-btn" data-pip-index="5" role="tab" aria-selected="false" title="6. Compact Mobile">6</button>
+                    <button type="button" class="archetype-pip-btn" data-pip-index="6" role="tab" aria-selected="false" title="7. Enterprise Compliant">7</button>
+                    <button type="button" class="archetype-pip-btn" data-pip-index="7" role="tab" aria-selected="false" title="8. Kebab Identifier">8</button>
+                  </div>
                 </div>
                 <button type="button" class="btn-text-action" id="btn-copy-all" title="Copy all 8 archetypes">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                   </svg>
                   <span>Copy All</span>
                 </button>
               </div>
+            </article>
 
-              <!-- Archetypes List Table (Challenges Row Pattern) -->
-              <div class="archetypes-list" id="variations-list">
-                <!-- Dynamically populated by app.js -->
+            <!-- Saved Credentials Vault (Card 2) -->
+            <article class="glass-subcard vault-storage-section" id="section-vault">
+              <div class="section-title-row">
+                <div class="title-left">
+                  <h2 class="subcard-title">Saved Vault</h2>
+                  <span class="subcard-subtitle">Local credentials stored on this device</span>
+                </div>
+                <div class="vault-header-actions">
+                  <span class="vault-count-badge" id="vault-count-badge">3 Saved</span>
+                  <button type="button" class="btn-text-action" id="btn-export-vault" title="Export all saved credentials as JSON">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="7 10 12 15 17 10"></polyline>
+                      <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <span>Export</span>
+                  </button>
+                  <button type="button" class="btn-text-action" id="btn-clear-vault" title="Clear all saved credentials">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                    <span>Clear</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Quick Save Form Row -->
+              <div class="vault-quick-save-row">
+                <input type="text" class="vault-label-input" id="input-vault-label" placeholder="Save as (e.g. Google, Work, WiFi)..." maxlength="32" autocomplete="off" spellcheck="false" aria-label="Credential Label">
+                <button type="button" class="vault-add-btn" id="btn-save-current-to-vault" title="Save active password to vault">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  <span>Save Active</span>
+                </button>
+              </div>
+
+              <!-- Saved Passwords List Container -->
+              <div class="vault-items-list" id="vault-items-list" role="list" aria-label="Saved Credentials">
+                <!-- Dynamically populated via app.js -->
+              </div>
+
+              <!-- Empty State (Shown when vault has 0 items) -->
+              <div class="vault-empty-state" id="vault-empty-state" style="display: none;">
+                <div class="empty-state-icon">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                </div>
+                <span class="empty-state-title">No Saved Credentials</span>
+                <span class="empty-state-desc">Type a label above and click 'Save Active' to save your generated passwords here.</span>
               </div>
             </article>
 
           </section>
 
-          <!-- Right Column: Metrics Overview + Era Scrubber + Seed Anchors + Complexity -->
+          <!-- Right Column: Era Scrubber + Seed Anchors + Complexity -->
           <section class="console-column column-right">
-
-            <!-- Top Row: Stacked Metrics & Circular Entropy Gauge (Inspired by Reference Overview) -->
-            <div class="overview-combo-grid">
-
-              <!-- Stacked 3 Metric Pills (like 108bpm, 2.5km, 1.7l in Reference) -->
-              <div class="stacked-metrics-col">
-                <div class="mini-metric-card">
-                  <div class="metric-icon-bubble">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                    </svg>
-                  </div>
-                  <div class="metric-info">
-                    <span class="metric-val" id="overview-entropy-rating">Fortress</span>
-                    <span class="metric-lbl" id="overview-entropy-desc">164 bits Shannon</span>
-                  </div>
-                </div>
-
-                <div class="mini-metric-card">
-                  <div class="metric-icon-bubble">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                  </div>
-                  <div class="metric-info">
-                    <span class="metric-val" id="overview-crack-time">Centuries</span>
-                    <span class="metric-lbl">Crack Resistance</span>
-                  </div>
-                </div>
-
-                <div class="mini-metric-card">
-                  <div class="metric-icon-bubble">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                    </svg>
-                  </div>
-                  <div class="metric-info">
-                    <span class="metric-val">8 Formats</span>
-                    <span class="metric-lbl">Deterministic Sync</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Circular Entropy Gauge (Inspired by the Donut chart in Reference Overview) -->
-              <div class="gauge-card">
-                <div class="gauge-header">
-                  <span class="gauge-title">Security Gauge</span>
-                  <span class="gauge-tag">Optimal</span>
-                </div>
-                <div class="gauge-body">
-                  <div class="donut-chart-wrap">
-                    <svg class="donut-svg" viewBox="0 0 100 100">
-                      <circle class="donut-track" cx="50" cy="50" r="38" />
-                      <circle class="donut-fill-gold" cx="50" cy="50" r="38" stroke-dasharray="238.76" stroke-dashoffset="60" />
-                      <circle class="donut-fill-cyan" cx="50" cy="50" r="38" stroke-dasharray="238.76" stroke-dashoffset="140" />
-                    </svg>
-                    <div class="donut-center-text">
-                      <span class="donut-percentage">98%</span>
-                      <span class="donut-sublabel">Entropy</span>
-                    </div>
-                  </div>
-                  <div class="gauge-stats-list">
-                    <div class="gauge-stat-row">
-                      <span class="stat-dot gold-dot"></span>
-                      <span class="stat-name">Char Variety</span>
-                      <span class="stat-val">4 / 4</span>
-                    </div>
-                    <div class="gauge-stat-row">
-                      <span class="stat-dot cyan-dot"></span>
-                      <span class="stat-name">Anchor Sets</span>
-                      <span class="stat-val">4 Active</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
 
             <!-- Birth Era Scrubber (EXACTLY inspired by the June 2023 calendar scrubber in Reference) -->
             <article class="glass-subcard era-scrubber-card" id="section-era">

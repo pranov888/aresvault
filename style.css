@@ -12,10 +12,11 @@
    ========================================================================== */
 
 :root, [data-theme="dark"] {
-  --bg-viewport: #07090c;
-  
-  /* Frosted Smoked Glass Tokens (Dark Mode) */
-  --glass-surface: linear-gradient(135deg, rgba(20, 26, 36, 0.72) 0%, rgba(11, 15, 22, 0.8) 100%);
+  --bg-viewport: #030712;
+  --bg-gradient: linear-gradient(180deg, #020713 0%, #06142a 24%, #0b2246 52%, #113466 80%, #18447e 100%);
+
+  /* Frosted Smoked Celestial Glass Tokens (Dark Mode: Midnight Starry Sky) */
+  --glass-surface: linear-gradient(135deg, rgba(11, 20, 36, 0.74) 0%, rgba(6, 12, 24, 0.84) 100%);
   --glass-surface-border: rgba(255, 255, 255, 0.13);
   --glass-subcard: rgba(255, 255, 255, 0.045);
   --glass-subcard-border: rgba(255, 255, 255, 0.08);
@@ -58,6 +59,7 @@
 
 [data-theme="light"] {
   --bg-viewport: #1872d8;
+  --bg-gradient: linear-gradient(175deg, #1565c0 0%, #1e88e5 28%, #3ba2f8 58%, #7ec4fb 85%, #bae6fd 100%);
 
   /* Frosted Bright Glass Tokens (Light Mode - Sky Blue Theme) */
   --glass-surface: linear-gradient(135deg, rgba(255, 255, 255, 0.82) 0%, rgba(246, 250, 254, 0.88) 100%);
@@ -120,7 +122,9 @@ body {
 }
 
 /* ==========================================================================
-   Dynamic Atmospheric Backdrop: Light Sky vs Dark Image 2 Color Mesh
+   Atmospheric Celestial Engine: Day Sky vs Midnight Starry Sky
+   - Light Theme: Daytime Azure Stratosphere with Sun Corona & Cirrus Rays
+   - Dark Theme: Deep Midnight Blue with 175 Realistic Stars & Diamond Sparkles
    ========================================================================== */
 .ambient-backdrop {
   position: fixed;
@@ -132,111 +136,103 @@ body {
   overflow: hidden;
 }
 
-/* Dark Mode: Image 2 Color Palette Mesh Aura */
-.dark-mesh-backdrop {
+.sky-scene {
   position: absolute;
   inset: 0;
-  background: #07090c;
-  opacity: 1;
-  transition: opacity 0.4s ease;
-}
-
-[data-theme="light"] .dark-mesh-backdrop {
-  opacity: 0;
-  display: none;
-}
-
-.mesh-orb {
-  position: absolute;
-  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.55s ease;
   pointer-events: none;
 }
 
-.mesh-lime {
-  top: -80px;
-  right: 12%;
-  width: 580px;
-  height: 580px;
-  background: radial-gradient(circle, #00e676 0%, #10f543 35%, transparent 70%);
-  filter: blur(130px);
-  opacity: 0.24;
-}
-
-.mesh-cyan {
-  bottom: 8%;
-  left: 6%;
-  width: 620px;
-  height: 620px;
-  background: radial-gradient(circle, #0ea5e9 0%, #2563eb 45%, transparent 70%);
-  filter: blur(150px);
-  opacity: 0.20;
-}
-
-.mesh-deep {
-  top: 35%;
-  left: 30%;
-  width: 520px;
-  height: 520px;
-  background: radial-gradient(circle, #059669 0%, #064e3b 50%, transparent 70%);
-  filter: blur(160px);
-  opacity: 0.14;
-}
-
-.dark-grid-overlay {
+/* Seamless Sky Canvases (Day Stratosphere vs Midnight Starfield) */
+.day-sky-canvas {
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 60px 60px;
-  opacity: 0.6;
-}
-
-/* Light Mode: Vivid Blue Sky with Sun & Cloud Waves (Image 1) */
-.light-sky-backdrop {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  display: none;
-  transition: opacity 0.4s ease;
-}
-
-[data-theme="light"] .light-sky-backdrop {
-  opacity: 1;
-  display: block;
-}
-
-.sky-gradient-base {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #1b7ee5 0%, #2993fb 35%, #59affd 70%, #9dd0fe 100%);
-}
-
-.sky-sun-beam {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 65vw;
-  height: 65vh;
-  background: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.35) 0%, transparent 65%);
-}
-
-.sky-sun-svg {
-  position: absolute;
-  top: 2.25rem;
-  right: 4.5rem;
-  width: 140px;
-  height: 140px;
-  z-index: 1;
-  filter: drop-shadow(0 12px 28px rgba(245, 158, 11, 0.35));
-}
-
-.sky-clouds-svg {
-  position: absolute;
-  bottom: 0;
-  left: 0;
   width: 100vw;
-  height: 380px;
-  z-index: 1;
+  height: 100vh;
+  background: radial-gradient(circle at 82% 16%, rgba(255, 255, 255, 0.42) 0%, rgba(224, 242, 254, 0.22) 28%, transparent 60%),
+              radial-gradient(circle at 18% 78%, rgba(219, 234, 254, 0.28) 0%, transparent 45%),
+              linear-gradient(175deg, #1d74db 0%, #2884eb 26%, #4ba2f7 55%, #8ecbfe 82%, #c9e6fe 100%);
+}
+
+.night-sky-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at 82% 18%, rgba(37, 99, 235, 0.22) 0%, rgba(15, 23, 42, 0.05) 35%, transparent 65%),
+              radial-gradient(circle at 16% 22%, rgba(29, 78, 216, 0.18) 0%, transparent 50%),
+              linear-gradient(180deg, #020713 0%, #06152e 22%, #0b2246 50%, #113464 78%, #18447e 100%);
+}
+
+/* Visibility Control based on Theme (Default: Night Sky, Light: Day Sky) */
+.night-sky-scene {
+  opacity: 1;
+  visibility: visible;
+}
+.day-sky-scene {
+  opacity: 0;
+  visibility: hidden;
+}
+
+[data-theme="light"] .day-sky-scene {
+  opacity: 1;
+  visibility: visible;
+}
+[data-theme="light"] .night-sky-scene {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Night Starfield SVG */
+.night-starfield-svg {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+
+/* Stationary Dot-Like Starfield: 100% Still, Only Shimmering Opacity */
+.star-dot {
+  /* ZERO transform, ZERO translate, ZERO scale - 100% stationary */
+}
+
+@keyframes starShimmerA {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.95; }
+}
+
+@keyframes starShimmerB {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 0.20; }
+}
+
+@keyframes starShimmerC {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+@keyframes starShimmerD {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.80; }
+}
+
+.star-dot.twinkle-a {
+  animation: starShimmerA 3.6s ease-in-out infinite;
+}
+
+.star-dot.twinkle-b {
+  animation: starShimmerB 4.4s ease-in-out infinite;
+}
+
+.star-dot.twinkle-c {
+  animation: starShimmerC 3.0s ease-in-out infinite;
+}
+
+.star-dot.twinkle-d {
+  animation: starShimmerD 5.2s ease-in-out infinite;
 }
 
 /* ==========================================================================
@@ -314,7 +310,7 @@ body {
   backdrop-filter: blur(40px) saturate(190%);
   -webkit-backdrop-filter: blur(40px) saturate(190%);
   border: 1px solid var(--glass-surface-border);
-  border-radius: 32px;
+  border-radius: 24px;
   box-shadow: var(--shadow-console);
   padding: 2.25rem 2.5rem;
   display: flex;
@@ -451,7 +447,7 @@ body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-subcard-border);
-  border-radius: 24px;
+  border-radius: 18px;
   padding: 1.5rem;
   box-shadow: var(--shadow-subcard);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -496,6 +492,14 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
+  flex-shrink: 0;
+}
+
+.format-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
 }
 
 .badge-tag {
@@ -509,12 +513,74 @@ body {
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--status-emerald);
+  white-space: nowrap;
 }
 
 .credential-actions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.65rem;
+}
+
+.format-stepper-control {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.stepper-arrow-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-input-bg);
+  border: 1px solid var(--glass-input-border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stepper-arrow-btn:hover {
+  background: var(--glass-subcard-hover);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.stepper-arrow-btn:active {
+  transform: translateY(1px);
+}
+
+.active-format-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+  margin-top: -0.4rem;
+}
+
+.format-capsule-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--glass-subcard-border);
+}
+
+.capsule-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.capsule-bar-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
 }
 
 .card-action-btn {
@@ -696,75 +762,240 @@ body {
   background: var(--glass-subcard);
 }
 
-.archetypes-list {
+/* Single-Item Focused Archetype Carousel Controls */
+.archetype-header-controls {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 0.65rem;
 }
 
-/* Challenges Row Pattern */
-.archetype-item-row {
+.archetype-counter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  background: var(--glass-input-bg);
+  border: 1px solid var(--glass-input-border);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.05em;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
+}
+
+.counter-sep {
+  color: var(--text-muted);
+  font-weight: 400;
+  margin: 0 0.1rem;
+}
+
+.archetype-nav-arrows {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.archetype-nav-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-input-bg);
+  border: 1px solid var(--glass-input-border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.archetype-nav-btn:hover {
+  background: var(--glass-subcard-hover);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.archetype-nav-btn:active {
+  transform: translateY(1px);
+}
+
+/* ==========================================================================
+   Card 2: Saved Credentials Vault
+   ========================================================================== */
+.vault-storage-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.vault-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vault-count-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.14);
+  border: 1px solid rgba(14, 165, 233, 0.35);
+  color: #38bdf8;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+[data-theme="light"] .vault-count-badge {
+  background: rgba(2, 132, 199, 0.12);
+  border-color: rgba(2, 132, 199, 0.35);
+  color: #0284c7;
+}
+
+/* Quick Save Bar */
+.vault-quick-save-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vault-label-input {
+  flex: 1;
+  height: 38px;
+  padding: 0 0.95rem;
+  border-radius: 10px;
+  background: var(--glass-input-bg);
+  border: 1px solid var(--glass-input-border);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.vault-label-input:focus {
+  border-color: rgba(14, 165, 233, 0.6);
+  box-shadow: 0 0 10px rgba(14, 165, 233, 0.2);
+}
+
+.vault-add-btn {
+  height: 38px;
+  padding: 0 1rem;
+  border-radius: 10px;
+  background: var(--btn-primary-bg);
+  border: 1px solid var(--glass-subcard-border);
+  color: var(--btn-primary-text);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vault-add-btn:hover {
+  background: var(--btn-primary-hover);
+  transform: translateY(-1px);
+}
+
+/* Saved Items List */
+.vault-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  max-height: 340px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.vault-items-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.vault-items-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+}
+
+[data-theme="light"] .vault-items-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.vault-item-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 0.95rem 1.15rem;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  gap: 0.75rem;
+  padding: 0.75rem 0.95rem;
+  border-radius: 14px;
+  background: var(--glass-input-bg);
+  border: 1px solid var(--glass-input-border);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.04);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  cursor: pointer;
 }
 
-.archetype-item-row:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.12);
-  transform: translateX(2px);
+.vault-item-row:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-1px);
 }
 
-.archetype-item-row.selected {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+[data-theme="light"] .vault-item-row:hover {
+  border-color: rgba(30, 136, 229, 0.3);
 }
 
-.row-left-content {
+.vault-item-left {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 0.75rem;
   min-width: 0;
   flex: 1;
 }
 
-.row-circle-indicator {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.25);
+.vault-service-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: rgba(14, 165, 233, 0.15);
+  border: 1px solid rgba(14, 165, 233, 0.35);
+  color: #38bdf8;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
   flex-shrink: 0;
-  transition: all 0.2s ease;
+  text-transform: uppercase;
 }
 
-.archetype-item-row:hover .row-circle-indicator {
-  border-color: var(--text-primary);
+[data-theme="light"] .vault-service-avatar {
+  background: rgba(2, 132, 199, 0.12);
+  border-color: rgba(2, 132, 199, 0.35);
+  color: #0284c7;
 }
 
-.row-circle-indicator.completed {
-  border-color: #10b981;
-  background: rgba(16, 185, 129, 0.2);
-}
-
-.row-text-group {
+.vault-service-details {
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
   min-width: 0;
+  flex: 1;
 }
 
-.row-name {
-  font-size: 0.9rem;
+.vault-service-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.vault-service-name {
+  font-size: 0.86rem;
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
@@ -772,20 +1003,164 @@ body {
   text-overflow: ellipsis;
 }
 
-.row-preview-string {
+.vault-service-pwd-wrap {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.row-right-actions {
+.vault-pwd-masked {
+  font-size: 0.88rem;
+  letter-spacing: 0.2em;
+  opacity: 0.75;
+}
+
+.vault-pwd-plain {
+  color: var(--status-emerald);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.vault-item-actions {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.4rem;
   flex-shrink: 0;
+}
+
+.btn-vault-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  height: 32px;
+  padding: 0 0.85rem;
+  border-radius: 999px;
+  background: var(--btn-primary-bg);
+  border: 1px solid var(--glass-subcard-border);
+  color: var(--btn-primary-text);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.btn-vault-copy:hover {
+  background: var(--btn-primary-hover);
+  transform: translateY(-1px);
+}
+
+.btn-vault-copy.copied {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.btn-vault-action-small {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--glass-subcard);
+  border: 1px solid var(--glass-input-border);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-vault-action-small:hover {
+  color: var(--text-primary);
+  background: var(--glass-subcard-hover);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.btn-vault-delete:hover {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.vault-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.25rem 1.5rem;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+.empty-state-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--glass-input-bg);
+  border: 1px solid var(--glass-input-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.empty-state-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.empty-state-desc {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  max-width: 300px;
+  line-height: 1.4;
+}
+
+/* Numbered Capsule Switcher Track: [1] [2] [3] [4] [5] [6] [7] [8] */
+.archetype-pips-track {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.45rem;
+  padding-top: 0.2rem;
+}
+
+.archetype-pip-btn {
+  padding: 0.45rem 0.2rem;
+  border-radius: 10px;
+  border: 1px solid var(--glass-input-border);
+  background: var(--glass-input-bg);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.archetype-pip-btn:hover {
+  background: var(--glass-subcard-hover);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.archetype-pip-btn.active {
+  background: rgba(14, 165, 233, 0.22);
+  border-color: rgba(14, 165, 233, 0.65);
+  color: #38bdf8;
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(14, 165, 233, 0.25);
+}
+
+[data-theme="light"] .archetype-pip-btn.active {
+  background: rgba(21, 101, 192, 0.14);
+  border-color: #1e88e5;
+  color: #1565c0;
+  box-shadow: 0 0 10px rgba(30, 136, 229, 0.2);
 }
 
 /* Reference-Style Soft Non-Neon Status Pills */
