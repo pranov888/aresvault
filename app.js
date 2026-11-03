@@ -10,12 +10,8 @@
   // Constants & Storage Keys
   const THEME_STORAGE_KEY = 'ares_vault_theme';
 
-  // DOM Elements - Navigation & Theme
-  const dockBtnVault = document.getElementById('dock-btn-vault');
-  const dockBtnAnchors = document.getElementById('dock-btn-anchors');
-  const dockBtnArchetypes = document.getElementById('dock-btn-archetypes');
+  // DOM Elements - Theme
   const dockBtnTheme = document.getElementById('dock-btn-theme');
-  const dockBtnGuide = document.getElementById('dock-btn-guide');
   const iconSun = document.querySelector('.icon-sun');
   const iconMoon = document.querySelector('.icon-moon');
 
@@ -43,7 +39,6 @@
   // DOM Elements - Header & Actions
   const btnDemoTrigger = document.getElementById('btn-demo-trigger');
   const btnResetTrigger = document.getElementById('btn-reset-trigger');
-  const btnSecurityInfo = document.getElementById('btn-security-info');
 
   // DOM Elements - Primary Display
   const primaryDisplay = document.getElementById('primary-password-text');
@@ -212,13 +207,6 @@
       });
     }
 
-    // Security Info Bell
-    if (btnSecurityInfo) {
-      btnSecurityInfo.addEventListener('click', () => {
-        showToast('100% Client-Side Sandbox: Zero network calls');
-      });
-    }
-
     // Mask / Unmask Toggle
     if (btnToggleVisibility) {
       btnToggleVisibility.addEventListener('click', toggleVisibility);
@@ -292,44 +280,6 @@
 
     // Initialize Saved Vault items from localStorage
     initSavedVault();
-
-    // Dock Navigation Scroll
-    if (dockBtnVault) {
-      dockBtnVault.addEventListener('click', () => {
-        setActiveDock(dockBtnVault);
-        document.getElementById('section-hero')?.scrollIntoView({ behavior: 'smooth' });
-      });
-    }
-
-    if (dockBtnAnchors) {
-      dockBtnAnchors.addEventListener('click', () => {
-        setActiveDock(dockBtnAnchors);
-        document.getElementById('section-anchors')?.scrollIntoView({ behavior: 'smooth' });
-      });
-    }
-
-    if (dockBtnArchetypes) {
-      dockBtnArchetypes.addEventListener('click', () => {
-        setActiveDock(dockBtnArchetypes);
-        const targetSection = document.getElementById('section-vault') || document.getElementById('section-hero');
-        targetSection?.scrollIntoView({ behavior: 'smooth' });
-      });
-    }
-
-    if (dockBtnGuide) {
-      dockBtnGuide.addEventListener('click', (e) => {
-        e.preventDefault();
-        setActiveDock(dockBtnGuide);
-        document.getElementById('usage-guide')?.scrollIntoView({ behavior: 'smooth' });
-      });
-    }
-  }
-
-  function setActiveDock(activeBtn) {
-    [dockBtnVault, dockBtnAnchors, dockBtnArchetypes, dockBtnGuide].forEach(btn => {
-      if (btn) btn.classList.remove('active');
-    });
-    if (activeBtn) activeBtn.classList.add('active');
   }
 
   // Era Scrubber Setup
